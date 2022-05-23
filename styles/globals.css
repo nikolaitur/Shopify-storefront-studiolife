@@ -1,5 +1,11 @@
+@font-face {
+  font-family: Julietta;
+  src: url("/fonts/Julietta-Regular.otf")
+}
+
 html,
 body {
+  scroll-behavior: smooth;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -13,4 +19,52 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+}
+
+div[data-framer-component-type='Text'] span {
+  font-size: var(--framer-font-size) !important;
+  line-height: var(--framer-line-height) !important;
+}
+
+.fd-btn {
+  border-radius: 6px !important; 
+}
+
+.fd-btn > span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.fd-form-control {
+  border-radius: 6px !important;
+}
+
+.studiolife { 
+  font-family: Julietta;
+}
+
+.sl-heading { 
+  font-size: 2.75rem !important;
+}
+
+.class_desc_outer_box > p {
+  margin-top: 12px;
+}
+
+.class_desc_outer_box > h2 {
+  font-weight: 400;
+  font-size: 1.75em;
+}
+
+.class_desc_outer_box > ul {
+  margin-top: 18px;
+}
+
+.class_desc_outer_box > ul > li {
+  margin-top: 12px;
 }
