@@ -26,7 +26,7 @@ export default async function handler(
   Message: ${data.message}`;
 
   const mailersend = new MailerSend({
-    api_key: process.env.NX_MAILERSEND_TOKEN,
+    api_key: process.env.MAILERSEND_TOKEN,
   });
 
   console.log(emailText);

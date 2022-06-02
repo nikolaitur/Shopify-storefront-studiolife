@@ -41,7 +41,7 @@ export default function ThankYou({ data }: any) {
       <Head>
         <title>Thank You!</title>
       </Head>
-      <Container py={20} maxW="container.xl">
+      <Container py={20} maxW="container.lg">
         <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
           <GridItem colSpan={2}>
             <Stack spacing={8} align="flex-start">
@@ -191,7 +191,7 @@ export async function getServerSideProps(context: any) {
   const base_url =
     process.env.NODE_ENV === "production"
       ? process.env.NEXT_PUBLIC_SHOP_URL
-      : "http://localhost:4200";
+      : "http://localhost:3000";
 
   const result = await fetch(
     `${base_url}/api/get-order?orderId=${context.params.id}`

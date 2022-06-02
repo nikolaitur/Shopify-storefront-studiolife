@@ -10,14 +10,14 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Divider,
-  Image
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { CgMenuGridR } from 'react-icons/cg'
-import styles from '../styles/navbar.module.scss';
-import Link from 'next/link';
-import getCollections from 'lib/get-collections';
+  Image,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { CgMenuGridR } from "react-icons/cg";
+import styles from "../styles/navbar.module.scss";
+import Link from "next/link";
+// import getCollections from 'lib/get-collections';
 
 const Menu = () => {
   const {
@@ -26,21 +26,21 @@ const Menu = () => {
     onClose: menuOnClose,
   } = useDisclosure();
   const router = useRouter();
-  const [collections, setCollections] = useState<any>([]);
+  // const [collections, setCollections] = useState<any>([]);
 
   useEffect(() => {
-    router.events.on('routeChangeStart', menuOnClose);
+    router.events.on("routeChangeStart", menuOnClose);
 
-    async function run() {
-      const result = await getCollections("homepage");
+    // async function run() {
+    //   const result = await getCollections("homepage");
 
-      setCollections(result.collections.edges);
-    }
+    //   setCollections(result.collections.edges);
+    // }
 
-    run();
+    // run();
 
     return () => {
-      router.events.off('routeChangeStart', menuOnClose);
+      router.events.off("routeChangeStart", menuOnClose);
     };
   }, []);
 
@@ -50,14 +50,14 @@ const Menu = () => {
         as={CgMenuGridR}
         onClick={menuOnOpen}
         style={{
-          cursor: 'pointer',
+          cursor: "pointer",
         }}
         h={8}
         w={8}
         _hover={{
           opacity: 0.4,
         }}
-        transition={'opacity 200ms ease'}
+        transition={"opacity 200ms ease"}
       />
       <Drawer
         isOpen={menuIsOpen}
@@ -69,31 +69,32 @@ const Menu = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Image src="/studiolife_full_logo.png" h="80px" alt="StudioLife logo" />
+            <Image
+              src="/studiolife_full_logo.png"
+              h="80px"
+              alt="StudioLife logo"
+            />
           </DrawerHeader>
           <DrawerBody p={8}>
-            <VStack spacing={2} alignItems={'flex-start'}>
-              <MenuItem url={'/'} text="Home" />
-              <MenuItem url={'/private-events'} text="Private + Corporate Events" />
-              {collections.length > 0 && (
-                <>
-                  <Divider />
-                  {collections.map((c:any) => (
-                    <MenuItem
-                      key={c.node.handle}
-                      url={`/collection/${c.node.handle}`}
-                      text={c.node.title}
-                    />
-                  ))}
-                  {/* <MenuItem url={'/browse-all'} text="Browse All" /> */}
-                  <Divider />
-                </>
-              )}
-              <MenuItem url={'/partner'} text="Partner with us" />
-              <MenuItem url={'/about'} text="About" />
+            <VStack spacing={2} alignItems={"flex-start"}>
+              <MenuItem url={"/"} text="Home" />
+              <>
+                <Divider />
+                <Text fontSize="18px" fontWeight={600}>create space</Text>
+                <MenuItem url={`/collection/benefits`} text={"benefits"} />
+                <MenuItem url={`/collection/live-events`} text={"live events"} />
+                <MenuItem url={`/collection/on-demand-workshops`} text={"on-demand-workshops"} />
+                <Divider />
+              </>
+              <MenuItem
+                url={"/private-events"}
+                text="Private + Corporate Events"
+              />
+              <MenuItem url={"/partner"} text="Partner with us" />
+              <MenuItem url={"/about"} text="About" />
               {/* <MenuItem url={'/blog'} text="Blog" /> */}
-              <MenuItem url={'/help'} text="Help" />
-              <MenuItem url={'/contact'} text="Contact" />
+              {/* <MenuItem url={"/help"} text="Help" /> */}
+              <MenuItem url={"/contact"} text="Contact" />
             </VStack>
           </DrawerBody>
         </DrawerContent>
@@ -104,10 +105,16 @@ const Menu = () => {
 
 export default Menu;
 
-const MenuItem = ({ url, text }: {url: string, text: string}) => {
+const MenuItem = ({ url, text }: { url: string; text: string }) => {
   return (
     <Link href={url} passHref>
-      <Text cursor={'pointer'} fontSize={['24px']} textTransform="lowercase" className={styles.menuItem}>
+      <Text
+        cursor={"pointer"}
+        fontSize={["24px"]}
+        fontWeight={300}
+        textTransform="lowercase"
+        className={styles.menuItem}
+      >
         {text}
       </Text>
     </Link>

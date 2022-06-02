@@ -13,19 +13,19 @@ import {
   Divider,
   TagLeftIcon,
   TagLabel,
-  HStack
-} from '@chakra-ui/react';
-import Head from 'next/head';
-import { gql, GraphQLClient } from 'graphql-request';
-import { useState, useContext } from 'react';
-import CartContext from 'lib/CartContext';
-import formatter from 'lib/formatter';
-import { FaClock, FaUserGraduate } from 'react-icons/fa';
-import { GetStaticPropsContext } from 'next';
+  HStack,
+} from "@chakra-ui/react";
+import Head from "next/head";
+import { gql, GraphQLClient } from "graphql-request";
+import { useState, useContext } from "react";
+import CartContext from "lib/CartContext";
+import formatter from "lib/formatter";
+import { FaClock, FaUserGraduate } from "react-icons/fa";
+import { GetStaticPropsContext } from "next";
 
 //to-do: add "associated products" so that they can add additional kits like with Lettering for Light
 
-const Product = ({ handle, product } : { handle:string, product:any }) => {
+const Product = ({ handle, product }: { handle: string; product: any }) => {
   const { cart, setCart } = useContext(CartContext);
   const [variantId, setVariantId] = useState(() => {
     if (!product) return null;
@@ -36,8 +36,8 @@ const Product = ({ handle, product } : { handle:string, product:any }) => {
   const variants = product?.variants.edges;
 
   async function addToCart() {
-    const response = await fetch('/api/addtocart', {
-      method: 'POST',
+    const response = await fetch("/api/addtocart", {
+      method: "POST",
       body: JSON.stringify({
         variantId: variantId,
         cartId: cart.id,
@@ -46,13 +46,13 @@ const Product = ({ handle, product } : { handle:string, product:any }) => {
 
     setCart({
       ...cart,
-      status: 'dirty',
+      status: "dirty",
       lines: response.response.cartLinesAdd.cart.lines,
     });
   }
 
-  function checkPrice(id:string) {
-    const cv = variants.filter((v:any) => v.node.id === id);
+  function checkPrice(id: string) {
+    const cv = variants.filter((v: any) => v.node.id === id);
     return formatter.format(cv[0].node.priceV2.amount);
   }
 
@@ -65,8 +65,13 @@ const Product = ({ handle, product } : { handle:string, product:any }) => {
           {product.title} | {process.env.NEXT_PUBLIC_SHOP_NAME!}
         </title>
       </Head>
-      <Flex flexDirection={['column', 'row']}>
-      <AspectRatio ratio={1/1} w={["full", "50%"]} pos={["static", "sticky"]} top={0}>
+      <Flex flexDirection={["column", "row"]}>
+        <AspectRatio
+          ratio={1 / 1}
+          w={["full", "50%"]}
+          pos={["static", "sticky"]}
+          top={0}
+        >
           <Image
             src={product.images.edges[0].node.src}
             alt={``}
@@ -74,19 +79,17 @@ const Product = ({ handle, product } : { handle:string, product:any }) => {
           />
         </AspectRatio>
         <Container centerContent pt={20} pb={20}>
-          <Stack direction={['column']} spacing={8} w="full">
-            <Stack direction={'column'} spacing={2} alignItems={"flex-start"}>
+          <Stack direction={["column"]} spacing={8} w="full">
+            <Stack direction={"column"} spacing={2} alignItems={"flex-start"}>
               <Heading>{product.title}</Heading>
-              {/* <Text>with {product.metafields?.edges[0]?.node.value}</Text> */}
               <HStack spacing={2}>
                 <Tag size="lg">
-                    <TagLeftIcon boxSize={4} as={FaUserGraduate} />
-                    <TagLabel>{product.teacher?.value}</TagLabel>
+                  <TagLeftIcon boxSize={4} as={FaUserGraduate} />
+                  <TagLabel>{product.teacher?.value}</TagLabel>
                 </Tag>
-                {/* <Text>{product.metafields?.edges[1]?.node.value}</Text> */}
                 <Tag size="lg">
-                    <TagLeftIcon boxSize={4} as={FaClock} />
-                    <TagLabel>{product.duration?.value}</TagLabel>
+                  <TagLeftIcon boxSize={4} as={FaClock} />
+                  <TagLabel>{product.duration?.value}</TagLabel>
                 </Tag>
               </HStack>
             </Stack>
@@ -95,20 +98,22 @@ const Product = ({ handle, product } : { handle:string, product:any }) => {
               <Text fontSize={24} fontWeight={600}>
                 {checkPrice(variantId)}
               </Text>
-              <Select
-                value={variantId}
-                onChange={(e) => {
-                  setVariantId(e.target.value);
-                  checkPrice(e.target.value);
-                }}
-              >
-                {variants.map((v:any, i:number) => (
-                  <option key={v.node.id} value={v.node.id}>
-                    {v.node.title}
-                  </option>
-                ))}
-              </Select>
-              <Button alignSelf={'flex-start'} onClick={addToCart}>
+              {variants.length > 1 && (
+                <Select
+                  value={variantId}
+                  onChange={(e) => {
+                    setVariantId(e.target.value);
+                    checkPrice(e.target.value);
+                  }}
+                >
+                  {variants.map((v: any, i: number) => (
+                    <option key={v.node.id} value={v.node.id}>
+                      {v.node.title}
+                    </option>
+                  ))}
+                </Select>
+              )}
+              <Button alignSelf={"flex-start"} onClick={addToCart}>
                 Add To Cart
               </Button>
             </Stack>
@@ -131,7 +136,7 @@ export async function getStaticPaths() {
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        'X-Shopify-Storefront-Access-Token': process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
       },
     }
   );
@@ -188,7 +193,7 @@ export async function getStaticPaths() {
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
-    throw Error('Unable to retrieve Shopify Products. Please check logs');
+    throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
   return {
@@ -199,14 +204,14 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context:GetStaticPropsContext) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   const handle = context.params?.handle;
 
   const graphQLClient = new GraphQLClient(
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        'X-Shopify-Storefront-Access-Token': process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
       },
     }
   );
@@ -258,7 +263,7 @@ export async function getStaticProps(context:GetStaticPropsContext) {
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
-    throw Error('Unable to retrieve Shopify Products. Please check logs');
+    throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
   return {

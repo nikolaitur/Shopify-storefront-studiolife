@@ -1,9 +1,10 @@
-
+import { GiRoundStar } from 'react-icons/gi'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'review',
   title: 'Review',
   type: 'document',
+  icon: GiRoundStar,
   fields: [
     {
       name: 'title',

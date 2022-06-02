@@ -21,7 +21,7 @@ export default function FAQ({ data }: { data: any }) {
   return (
     <>
       <Head>
-        <title>Frequently Asked Questions</title>
+        <title>Help | StudioLife</title>
       </Head>
       <Box pt={[10, 20]} bg="brand.accent1" w="full">
         <Container maxW="container.lg" py={20} centerContent>

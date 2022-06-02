@@ -1,11 +1,7 @@
 import { Flex, Box, Image, Icon, useColorMode, Stack } from "@chakra-ui/react";
-import Link from "next/link";
 import { useState, useRef, useEffect, useContext } from "react";
-import { FaUser, FaSearch, FaQuestionCircle } from "react-icons/fa";
 import { HiOutlineInformationCircle, HiUserCircle } from "react-icons/hi";
 import { useRouter } from "next/router";
-import { isMobile, BrowserView, MobileView } from "react-device-detect";
-import dynamic from "next/dynamic";
 import ShopContext from "lib/ShopContext";
 import { Search } from "./Search";
 import Menu from "./Menu";
@@ -91,9 +87,10 @@ const NavBar = () => {
             opacity: 0.4,
           }}
           transition={"opacity 200ms ease"}
+          display={["none", "inherit"]}
         />
-        <Link href="/help" passHref>
-          <Icon
+          {/* <Icon
+            onClick={() => router.push("/help")}
             as={HiOutlineInformationCircle}
             color={colorMode === "dark" ? "white" : "black"}
             mr={4}
@@ -103,8 +100,8 @@ const NavBar = () => {
               opacity: 0.4,
             }}
             transition={"opacity 200ms ease"}
-          />
-        </Link>
+            display={["none", "inherit"]}
+          /> */}
         <Stack
           direction="row"
           spacing={3}

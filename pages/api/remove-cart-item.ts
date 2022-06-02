@@ -12,7 +12,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   
-    const data = JSON.parse(req.body)
+  const data = JSON.parse(req.body);
 
   const mutation = gql`
     mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -72,11 +72,9 @@ export default async function handler(
   `;
 
   const variables = {
-    cartId: Buffer.from(data.cartId, 'base64').toString(),
-    lineIds: Buffer.from(data.lineItemId, 'base64').toString(),
+    cartId: data.cartId,
+    lineIds: data.lineItemId
   };
-
-  console.log(variables)
 
   const response = await graphClient.request(mutation, variables);
 

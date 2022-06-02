@@ -33,7 +33,6 @@ export default function Account() {
       );
 
       if (token) setAuth(true);
-      //todo: check expiresAt
 
       if (token === null) router.push("/login");
     }
@@ -78,7 +77,7 @@ export default function Account() {
     return (
       <Box pt={40} pb={20}>
         <Head>
-          <title>{process.env.NX_NEXT_PUBLIC_SHOP_NAME} | Your Account</title>
+          <title>{process.env.NEXT_PUBLIC_SHOP_NAME} | Your Account</title>
         </Head>
         <Container centerContent>
           <Stack spacing={10} w="full">
@@ -160,7 +159,7 @@ function Orders({ userData }: { userData: any}) {
                   </Flex>
                 ))}
               </Box>
-              <NextLink href={`/order/${o.node.id}`}>
+              <NextLink href={`/order/${Buffer.from(o.node.id).toString('base64')}`}>
                 <Link>
                   <Text>View Order</Text>
                 </Link>

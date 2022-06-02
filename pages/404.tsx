@@ -28,7 +28,7 @@ export default function Custom404({ collections }: {collections: any}) {
           <Button onClick={() => process.browser && window.Tawk_API.maximize()}>Chat Now</Button>
         </VStack>
       </Container>
-      <Container py={20} maxW="container.lg">
+      {/* <Container py={20} maxW="container.lg">
         <Divider />
       </Container>
       <Container pt={10} pb={40} maxW="container.lg">
@@ -45,7 +45,7 @@ export default function Custom404({ collections }: {collections: any}) {
             <Button>see all events</Button>
           </VStack>
         )}
-      </Container>
+      </Container> */}
     </>
   );
 }

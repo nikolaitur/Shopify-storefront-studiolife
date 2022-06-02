@@ -1,8 +1,10 @@
+import { GiPartyFlags } from 'react-icons/gi'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'eventType',
-  title: 'Event Type',
+  title: 'Rental Event Types',
   type: 'document',
+  icon: GiPartyFlags,
   fields: [
     {
       name: 'name',
@@ -38,6 +40,7 @@ export default {
         name: 'slug',
         title: 'Slug',
         type: 'slug',
+        description: 'Only change this if you really have to. Changing the slug will break any bookmark a visitor has made.',
         options: {
           source: 'event',
           maxLength: 96,

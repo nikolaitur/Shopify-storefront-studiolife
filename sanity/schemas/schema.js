@@ -29,11 +29,11 @@ export default createSchema({
     about,
     eventType,
     post,
-    author,
-    category,
     help,
     faq,
     review,
+    author,
+    category,
     // When added to this list, object types can be used as
     // { type: 'typename' } in other document schemas
     blockContent,

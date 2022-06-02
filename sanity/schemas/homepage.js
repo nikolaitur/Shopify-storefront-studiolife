@@ -13,6 +13,11 @@ export default {
   
     fields: [
       {
+        name: 'metaDescription',
+        title: 'SEO: Meta Description',
+        type: 'text'
+      },
+      {
         title: "Hero Title",
         description:
           "This title will appear in the hero unit at the top of the page",

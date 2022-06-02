@@ -1,7 +1,6 @@
 import {
   Input,
   InputGroup,
-  InputLeftElement,
   Icon,
   useDisclosure,
   Modal,

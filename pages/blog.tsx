@@ -10,7 +10,7 @@ const Posts = ({ posts }: {posts: any}) => {
   return (
     <Box>
       <Head>
-        <title>Blog</title>
+        <title>Blog | StudioLife</title>
       </Head>
       <Container centerContent maxW="container.xl" p={[4, 20]} mt={20}>
         <Heading>Blog</Heading>

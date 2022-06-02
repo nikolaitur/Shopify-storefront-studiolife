@@ -101,28 +101,6 @@ const Cart = () => {
     );
   }
 
-  async function emptyCart() {
-    window.localStorage.removeItem(
-      `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`
-    );
-
-    const localCartData = await fetch('/api/create-cart').then((res) =>
-      res.json()
-    );
-
-    setCart({
-      id: localCartData.id,
-      checkoutUrl: localCartData.checkoutUrl,
-      estimatedCost: null,
-      lines: [],
-    });
-
-    window.localStorage.setItem(
-      `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:cart`,
-      JSON.stringify(localCartData)
-    );
-  }
-
   async function removeItem(id: string) {
     const resp = await fetch('/api/remove-cart-item', {
       method: 'POST',
@@ -182,7 +160,7 @@ const Cart = () => {
           <DrawerHeader>
             <Heading size="lg">Your Cart</Heading>
           </DrawerHeader>
-          <DrawerBody px={[2, 8]}>
+          <DrawerBody px={[2, 4]}>
             <VStack
               pt={0}
               justifyContent={cart.lines.length === 0 ? 'center' : 'flex-start'}
@@ -233,7 +211,7 @@ function CartLineItem({
   removeItem: any;
 }) {
   return (
-    <VStack borderBottom={'1px solid'} borderColor={'gray.300'} py={4}>
+    <VStack borderBottom={'1px solid'} borderColor={'gray.300'} py={4} w="full">
       <Flex
         w="full"
         justifyContent="space-between"
@@ -243,10 +221,11 @@ function CartLineItem({
         <Image
           boxSize={'120px'}
           borderRadius={6}
+          flexShrink={0}
           src={product.node.merchandise.product.images.edges[0].node.url}
           alt={product.node.merchandise.product.title}
         />
-        <VStack spacing={2} alignItems={'flex-start'} mr={2}>
+        <VStack spacing={2} alignItems={'flex-start'} mr={2} flexGrow={1}>
           <Text fontSize={20} fontWeight="bold">
             {product.node.merchandise.product.title}
           </Text>

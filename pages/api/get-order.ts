@@ -83,10 +83,10 @@ export default async function handler(
     `;
 
   const adminGraphClient = new GraphQLClient(
-    'https://studiolifecreatingspace.myshopify.com/admin/api/2022-01/graphql.json' as string,
+    'https://studiolifecreatingspace.myshopify.com/admin/api/2022-04/graphql.json' as string,
     {
       headers: {
-        'X-Shopify-Access-Token': process.env.NX_SHOPIFY_API_PASSWORD as string,
+        'X-Shopify-Access-Token': process.env.SHOPIFY_API_PASSWORD as string,
       },
     }
   );

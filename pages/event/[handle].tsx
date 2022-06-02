@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 
 //to-do: add "associated products" so that they can add additional kits like with Lettering for Light
 
-const Product = ({ handle, product }: {handle: string, product:any}) => {
+const Product = ({ handle, product }: { handle: string; product: any }) => {
   const { cart, setCart } = useContext(CartContext);
   const [variantId, setVariantId] = useState(() => {
     if (!product) return null;
@@ -49,8 +49,8 @@ const Product = ({ handle, product }: {handle: string, product:any}) => {
     });
   }
 
-  function checkPrice(id:string) {
-    const cv = variants.filter((v:any) => v.node.id === id);
+  function checkPrice(id: string) {
+    const cv = variants.filter((v: any) => v.node.id === id);
     return formatter.format(cv[0].node.priceV2.amount);
   }
 
@@ -90,7 +90,9 @@ const Product = ({ handle, product }: {handle: string, product:any}) => {
             pb={6}
           >
             <Box>
-              <Text>{dayjs(product.date?.value).format("dddd, MMMM DD, YYYY")}</Text>
+              <Text>
+                {dayjs(product.date?.value).format("dddd, MMMM DD, YYYY")}
+              </Text>
               <Heading>{product.title}</Heading>
             </Box>
             <HStack spacing={2}>
@@ -119,19 +121,21 @@ const Product = ({ handle, product }: {handle: string, product:any}) => {
               )}
             </HStack>
             <Stack spacing={4}>
-              <Select
-                value={variantId}
-                onChange={(e) => {
-                  setVariantId(e.target.value);
-                  checkPrice(e.target.value);
-                }}
-              >
-                {variants.map((v: any) => (
-                  <option key={v.node.id} value={v.node.id}>
-                    {v.node.title}
-                  </option>
-                ))}
-              </Select>
+              {variants.length > 1 && (
+                <Select
+                  value={variantId}
+                  onChange={(e) => {
+                    setVariantId(e.target.value);
+                    checkPrice(e.target.value);
+                  }}
+                >
+                  {variants.map((v: any) => (
+                    <option key={v.node.id} value={v.node.id}>
+                      {v.node.title}
+                    </option>
+                  ))}
+                </Select>
+              )}
               <Stack w="full" justify={"space-between"}>
                 <Text fontSize={24} fontWeight={600}>
                   {checkPrice(variantId)}
