@@ -8,13 +8,13 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from 'components/Navbar';
+import Footer from 'components/Footer';
 import Head from 'next/head';
 import CartContext from 'lib/CartContext';
 import { useState, useEffect } from 'react';
 import ShopContext from 'lib/ShopContext';
-import '../styles/globals.css';
+import '/styles/globals.css';
 import Tawk from 'lib/tawk';
 import MailingList from 'components/MailingList';
 
