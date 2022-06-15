@@ -26,7 +26,7 @@ import NextLink from "next/link";
 import { useRef } from "react";
 import { HiChevronDown } from "react-icons/hi";
 
-export default function NavBar() {
+const Navbar = () => {
   const router = useRouter();
 
   return (
@@ -158,3 +158,5 @@ function MobileMenu() {
     </>
   );
 }
+
+export default Navbar;
