@@ -8,7 +8,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
-import NavBar from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Head from 'next/head';
 import CartContext from 'lib/CartContext';
@@ -85,7 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/favicon-32x32.png" type="image/x-icon" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
-          <NavBar />
+          <Navbar />
           <Box>
             <Component {...pageProps} />
             <Box
