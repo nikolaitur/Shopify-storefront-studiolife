@@ -9,6 +9,16 @@ export default () =>
     .title("Menu")
     .items([
       S.listItem()
+      .title("Home")
+      .icon(ImHome)
+      .child(
+        S.editor()
+          .id("home")
+          .schemaType("homepage")
+          .documentId("home")
+          .title("Home")
+      ),
+      S.listItem()
         .title("Help")
         .icon(ImQuestion)
         .child(
@@ -20,6 +30,6 @@ export default () =>
         ),
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !["homepage", "about", "help"].includes(listItem.getId())
+          !["homepage","about", "help"].includes(listItem.getId())
       ),
     ]);

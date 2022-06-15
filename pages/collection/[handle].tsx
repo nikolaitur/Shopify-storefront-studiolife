@@ -1,5 +1,5 @@
-import Head from 'next/head';
-import { gql, GraphQLClient } from 'graphql-request';
+import Head from "next/head";
+import { gql, GraphQLClient } from "graphql-request";
 import {
   Container,
   Heading,
@@ -8,53 +8,102 @@ import {
   Flex,
   Box,
   Input,
-} from '@chakra-ui/react';
-import getCollections from 'lib/get-collections';
-import EventFeature from '../../components/EventFeature';
-import { useState } from 'react';
-import { GetStaticPropsContext } from 'next';
-const Search = require("@smakss/search");
+  AspectRatio,
+  Image,
+} from "@chakra-ui/react";
+import getCollections from "lib/get-collections";
+import EventFeature from "../../components/EventFeature";
+import { useState } from "react";
+import { GetStaticPropsContext } from "next";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
-export default function CollectionPage({ handle, data }: { handle: string, data: any}) {
-  const [searchTerm, setTerm] = useState('');
+const EventCard = dynamic<any>(
+  () => import("https://framer.com/m/Event-Card-p1O7.js@5qgLxSYGg46IfCaNup8C"!),
+  { ssr: false }
+);
+
+export default function CollectionPage({
+  handle,
+  data,
+}: {
+  handle: string;
+  data: any;
+}) {
+  const [searchTerm, setTerm] = useState("");
+  const router = useRouter();
 
   if (!data) return null;
 
   return (
     <>
-      <Box bgImage={data.image.url} bgSize="cover" bgPos="bottom">
         <Head>
           <title>{data.title} | StudioLife</title>
+          <meta name="description" content={data.description} />
         </Head>
-        <Container pt={40} pb={20} maxW="container.md">
-          <Stack spacing={4} bgColor="whiteAlpha.900" p={8} borderRadius={10}>
-            <Heading fontSize="5xl">{data.title}</Heading>
-            <Box
-              className="class_desc_outer_box"
-              dangerouslySetInnerHTML={{
-                __html: data.descriptionHtml,
-              }}
-            />
-          </Stack>
-        </Container>
-      </Box>
-      <Container py={20} maxW="container.md">
-        <Stack direction={['column']} spacing={8}>
-          {data.products.edges.length > 5 && (
+      <Stack direction={["column", "row"]} align="center" bgColor={"#eae6e1"}>
+        <Stack spacing={4} p={[2, 20]}>
+          <Heading fontSize="5xl">{data.title}</Heading>
+          <Box
+            className="class_desc_outer_box"
+            dangerouslySetInnerHTML={{
+              __html: data.descriptionHtml,
+            }}
+          />
+        </Stack>
+        <AspectRatio ratio={3 / 2} minW={"50%"}>
+          <Image src={data.image.url} alt={data.title} />
+        </AspectRatio>
+      </Stack>
+      <Container py={20} maxW="container.lg" centerContent>
+        <Stack direction={["column"]} spacing={8}>
+          {data.products.edges.length > 6 && (
             <Input
               value={searchTerm}
               onChange={(e) => setTerm(e.target.value)}
               placeholder="Search..."
+              maxW={360}
             />
           )}
-          <Flex w="full" gap={8} flexDir="column">
+          <Flex
+            w="full"
+            gap={8}
+            justify="center"
+            flexDir="row"
+            flexWrap={"wrap"}
+          >
             {data.products.edges
-              .filter((p:any) => p.node.title.toLowerCase().includes(searchTerm.toLowerCase()) )
-              .map((p:any) => (
-                <EventFeature node={p.node} key={p.node.id} />
+              .filter((p: any) =>
+                p.node.title.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((p: any) => (
+                <Box key={p.node.id}>
+                  <EventCard
+                    // Using default values:
+                    date={dayjs(p.node.date?.value).format("MMMM DD, YYYY")}
+                    duration={p.node.duration?.value}
+                    eventName={p.node.on_page_title?.value}
+                    eventType={p.node.productType}
+                    image={p.node.images.edges[0].node.transformedSrc}
+                    shortDesc={
+                      p.node.short_description?.value
+                        ? p.node.short_description?.value
+                        : "No description found. Click Sign Up to learn more."
+                    }
+                    teacher={p.node.teacher.value}
+                    time={dayjs(p.node.date?.value).format("hh:mm A PST")}
+                    tap={() => router.push(`/event/${p.node.handle}`)}
+                    variant={
+                      p.node.productType === "On-Demand Workshop"
+                        ? "Workshop"
+                        : "LiveEvent"
+                    }
+                  />
+                </Box>
               ))}
             {data.products.edges.length === 0 && (
-              <Stack textAlign={'center'} spacing={6}>
+              <Stack textAlign={"center"} spacing={6}>
                 <Heading fontSize="4xl">More events are in the works!</Heading>
                 <Text>
                   👇 Join our mailing list below to get updated when more events
@@ -80,14 +129,14 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context:GetStaticPropsContext) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   const handle = context.params?.handle;
 
   const graphQLClient = new GraphQLClient(
     process.env.NEXT_PUBLIC_SHOPIFY_URL!,
     {
       headers: {
-        'X-Shopify-Storefront-Access-Token': process.env.NEXT_PUBLIC_TOKEN!,
+        "X-Shopify-Storefront-Access-Token": process.env.NEXT_PUBLIC_TOKEN!,
       },
     }
   );
@@ -115,6 +164,18 @@ export async function getStaticProps(context:GetStaticPropsContext) {
                         value
                       }
                       date: metafield(namespace: "my_fields", key: "date") {
+                        value
+                      }
+                      short_description: metafield(
+                        namespace: "product"
+                        key: "short_description"
+                      ) {
+                        value
+                      }
+                      on_page_title: metafield(
+                        namespace: "product"
+                        key: "on_page_title"
+                      ) {
                         value
                       }
                       variants(first: 1) {
@@ -152,7 +213,7 @@ export async function getStaticProps(context:GetStaticPropsContext) {
 
   if (res.errors) {
     console.log(JSON.stringify(res.errors, null, 2));
-    throw Error('Unable to retrieve Shopify Products. Please check logs');
+    throw Error("Unable to retrieve Shopify Products. Please check logs");
   }
 
   return {

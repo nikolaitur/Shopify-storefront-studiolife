@@ -9,6 +9,8 @@ import {
   SimpleGrid,
   GridItem,
   Icon,
+  Link,
+  Divider,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
@@ -19,7 +21,14 @@ import { getClient, imageBuilder } from "lib/sanity";
 import { gql, GraphQLClient } from "graphql-request";
 import { isMobile } from "react-device-detect";
 import { HiUserGroup, HiDesktopComputer, HiOutlineFilm } from "react-icons/hi";
-import EventFeature from "../components/EventFeature";
+import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import MultiText from "lib/MultiText";
+
+const EventCard = dynamic<any>(
+  () => import("https://framer.com/m/Event-Card-p1O7.js@5qgLxSYGg46IfCaNup8C"!),
+  { ssr: false }
+);
 
 function HomePage({
   homepageData,
@@ -30,60 +39,69 @@ function HomePage({
 }) {
   const router = useRouter();
   const featuredEvents = useRef<any>(null);
+  const featuredWorkshops = useRef<any>(null);
 
   const heroImageSrc = !isMobile
-    ? imageBuilder(homepageData.heroImage).width(2400).format("webp").url()
-    : imageBuilder(homepageData.heroImage)
+    ? imageBuilder(homepageData.hero.image).width(2400).format("webp").url()
+    : imageBuilder(homepageData.hero.image)
         .width(600)
         .height(900)
         .format("webp")
         .url();
 
-  const aboutImageSrc = imageBuilder(homepageData.aboutImage).width(1800).url();
+  const aboutImageSrc = imageBuilder(homepageData.about.image)
+    .width(1800)
+    .url();
 
   return (
     <>
       <Head>
-        <title>StudioLife | Creating Space</title>
+        <title>{homepageData.pageTitle}</title>
         <meta name="description" content={homepageData.metaDescription} />
       </Head>
       <Box
         bgSize="cover"
-        bgPos={["top center", "center"]}
-        bgAttachment={["scroll", "fixed"]}
+        bgPos={["bottom center", "center"]}
         bgImage={heroImageSrc}
-        py={"300px"}
+        py={"200px"}
         pos="relative"
       >
         <Container maxW="container.lg" centerContent textAlign={"center"}>
-          <Heading as="h2" size="lg" fontWeight={300} color="black">
-            we are <span className="studiolife sl-heading">StudioLife</span>
+          <Heading as="h1" size="4xl" mt={1}>
+            {homepageData.hero.title}
           </Heading>
-          <Heading as="h1" size="3xl" color="black" mt={1}>
-            {homepageData.heroTitle}
-          </Heading>
-          <Text color="black">{homepageData.heroSubtext}</Text>
-          <Button
-            mt={6}
-            onClick={() =>
-              featuredEvents.current?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            upcoming events →
-          </Button>
+          <Text>{homepageData?.hero.text}</Text>
+          {collections.edges[0]?.node.products.edges.length > 0 && (
+            <Button
+              mt={6}
+              onClick={() =>
+                featuredEvents.current?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              upcoming events →
+            </Button>
+          )}
+          {collections.edges[0]?.node.products.edges.length === 0 && (
+            <Button
+              mt={6}
+              onClick={() =>
+                featuredWorkshops.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
+            >
+              featured workshops →
+            </Button>
+          )}
         </Container>
       </Box>
       {/* product features */}
-      <Container maxW="container.lg" pt={40} pb={20}>
+      <Container maxW="container.lg" pt={20} pb={20}>
         <Stack spacing={6} textAlign="center" alignItems={"center"}>
           <Heading size="xl" as="h2">
-            creating space for artists &amp; learners
+            {homepageData.belowTheFold.title}
           </Heading>
-          <Text maxW={["full", "50%"]}>
-            At StudioLife we strive to be a platform to connect artists with
-            anyone who wants to learn or practice a craft, and to help create
-            space in the lives of those we encounter.
-          </Text>
+          <Text maxW={["full", "50%"]}>{homepageData.belowTheFold.text}</Text>
           <SimpleGrid
             templateColumns={["repeate(1, 1fr)", "repeat(3, 1fr)"]}
             gap={6}
@@ -104,10 +122,7 @@ function HomePage({
                 <Heading size="lg" lineHeight={1.1}>
                   live classes
                 </Heading>
-                <Text>
-                  live instruction for any and all skill levels. join us
-                  in-person in Seattle, or virtually.
-                </Text>
+                <Text>{homepageData.belowTheFold.live}</Text>
               </Stack>
             </GridItem>
             <GridItem
@@ -124,11 +139,9 @@ function HomePage({
                   color={"brand.secondary"}
                 />
                 <Heading size="lg" lineHeight={1.1}>
-                  on-demand workshops
+                  recorded workshops
                 </Heading>
-                <Text>
-                  create space on your own time with recorded workshops
-                </Text>
+                <Text>{homepageData.belowTheFold.workshop}</Text>
               </Stack>
             </GridItem>
             <GridItem
@@ -143,35 +156,63 @@ function HomePage({
                 <Heading size="lg" lineHeight={1.1}>
                   private events
                 </Heading>
-                <Text>
-                  come rent our University District space, or host a virtual
-                  event for your remote team
-                </Text>
+                <Text>{homepageData.belowTheFold.private}</Text>
               </Stack>
             </GridItem>
           </SimpleGrid>
         </Stack>
       </Container>
       {/* featured events */}
-      <Container pt={10} pb={40} maxW="container.lg" ref={featuredEvents}>
-        {collections.edges[0]?.node.products.edges.length > 0 && (
+
+      {collections.edges[0]?.node.products.edges.length > 0 && (
+        <Container pt={10} pb={40} maxW="container.lg" ref={featuredEvents}>
           <VStack spacing={6} alignItems={"center"} w="full">
-            <Heading size="xl">upcoming events</Heading>
-            <SimpleGrid templateColumns={"repeat(2, 1fr)"} gap={6} w="full">
+            <Heading size="xl">upcoming live events</Heading>
+            <Box
+              maxW={["full", "80%"]}
+              textAlign="center"
+              dangerouslySetInnerHTML={{
+                __html: collections.edges[0].node.descriptionHtml,
+              }}
+            />
+            <Divider />
+            <Stack
+              direction={["column", "row"]}
+              justify="center"
+              spacing={6}
+              w="full"
+            >
               {collections.edges[0].node.products.edges.map(
                 ({ node }: { node: any }) => (
-                  <GridItem colSpan={2} key={node.id}>
-                    <EventFeature node={node} />
-                  </GridItem>
+                  <Box key={node.id}>
+                    <EventCard
+                      // Using default values:
+                      date={dayjs(node.date?.value).format("MMMM DD, YYYY")}
+                      duration={node.duration?.value}
+                      eventName={node.on_page_title.value}
+                      eventType={node.productType}
+                      image={node.images.edges[0].node.transformedSrc}
+                      shortDesc={
+                        node.short_description?.value
+                          ? node.short_description?.value
+                          : "No description found. Click Sign Up to learn more."
+                      }
+                      teacher={node.teacher.value}
+                      time={dayjs(node.date?.value).format("hh:mm A PST")}
+                      tap={() => router.push(`/event/${node.handle}`)}
+                      variant="LiveEvent"
+                    />
+                  </Box>
                 )
               )}
-            </SimpleGrid>
+            </Stack>
             <NextLink href="/collection/live-events">
-              <Button>see all events</Button>
+              <Link>see all</Link>
             </NextLink>
           </VStack>
-        )}
-      </Container>
+        </Container>
+      )}
+
       {/* about studiolife */}
       <Box
         bgImage={aboutImageSrc}
@@ -194,7 +235,7 @@ function HomePage({
             <Heading as="h2" size="xl">
               we are <span className="studiolife sl-heading">StudioLife</span>
             </Heading>
-            <Text textAlign="justify">{homepageData.aboutSubtext}</Text>
+            <Text textAlign="justify">{homepageData.about.text}</Text>
             <NextLink href="/about" passHref>
               <Button>about us</Button>
             </NextLink>
@@ -202,33 +243,48 @@ function HomePage({
         </Container>
       </Box>
       {/* event features */}
-      <Container pt={40} pb={20} maxW="container.lg">
+      <Container pt={20} pb={20} maxW="container.lg" ref={featuredWorkshops}>
         {collections.edges[1]?.node.products.edges.length > 0 && (
           <VStack spacing={6} alignItems={"center"} w="full">
             <Heading size="xl">featured workshops</Heading>
-            <Text maxW={["full", "80%"]} textAlign="center">
-              Create space in your own schedule to learn with us on your own
-              time! Our recorded workshops are a great way to take a workshop
-              outside of our live schedule. Register for a workshop and we will
-              mail your supply kit to your door.
-            </Text>
-            <Text>Watch, rewind, pause and enjoy.</Text>
-            <SimpleGrid templateColumns={"repeat(2, 1fr)"} gap={6}>
+            <Box
+              maxW={["full", "80%"]}
+              textAlign="center"
+              dangerouslySetInnerHTML={{
+                __html: collections.edges[1].node.descriptionHtml,
+              }}
+            />
+            <Stack
+              direction={["column", "row"]}
+              justify="center"
+              spacing={6}
+              w="full"
+            >
               {collections.edges[1].node.products.edges.map(
                 ({ node }: { node: any }) => (
-                  <GridItem
-                    colSpan={2}
-                    key={node.id}
-                    cursor={"pointer"}
-                    onClick={() => router.push(`/event/${node.handle}`)}
-                  >
-                    <EventFeature node={node} />
-                  </GridItem>
+                  <Box key={node.id}>
+                    <EventCard
+                      date={dayjs(node.date?.value).format("MMMM DD, YYYY")}
+                      duration={node.duration?.value}
+                      eventName={node.on_page_title?.value}
+                      eventType={node.productType}
+                      image={node.images.edges[0].node.transformedSrc}
+                      shortDesc={
+                        node.short_description?.value
+                          ? node.short_description?.value
+                          : "No description found. Click Sign Up to learn more."
+                      }
+                      teacher={node.teacher.value}
+                      time={dayjs(node.date?.value).format("hh:mm A PST")}
+                      tap={() => router.push(`/workshop/${node.handle}`)}
+                      variant="Workshop"
+                    />
+                  </Box>
                 )
               )}
-            </SimpleGrid>
+            </Stack>
             <NextLink href="/collection/on-demand-workshops">
-              <Button>see more</Button>
+              <Link>see all</Link>
             </NextLink>
           </VStack>
         )}
@@ -250,18 +306,13 @@ function HomePage({
             shadow="md"
           >
             <Box>
-              <Text fontSize="sm">share your craft with the world</Text>
+              <Text fontSize="sm">{homepageData.partner.supertext}</Text>
               <Heading as="h2" size="xl">
                 partner with{" "}
                 <span className="studiolife sl-heading">StudioLife</span>
               </Heading>
             </Box>
-            <Text>
-              We enable artists to come and teach without having to manage all
-              the nitty gritty that takes place from start to finish. Our hope
-              is that artists-instructors are free to show up and share their
-              gifts with eager learners.
-            </Text>
+            <Text>{homepageData.partner.text}</Text>
             <NextLink href="/partner">
               <Button>learn more</Button>
             </NextLink>
@@ -283,16 +334,10 @@ function HomePage({
           >
             <Stack spacing={4} alignItems={"flex-start"}>
               <Heading>private events</Heading>
-              <Text>
-                Virtual girls night with friends from across the country?
-                birthday party for the creative in your life? Book club wanting
-                to learn something new together?
-              </Text>
-              <Text>
-                We love connecting you with the perfect private event tailored
-                to your specific interests and offered exclusively to your
-                group.
-              </Text>
+              <MultiText
+                text={homepageData.private}
+                mapKey={"private_events"}
+              />
               <NextLink href="/private-events#space-rentals">
                 <Button>book now</Button>
               </NextLink>
@@ -307,16 +352,10 @@ function HomePage({
           >
             <Stack spacing={4} alignItems={"flex-start"}>
               <Heading>corporate events</Heading>
-              <Text>
-                We connect artists with corporate events for team building,
-                morale boosting and shared experiences for all skill levels and
-                personality types!
-              </Text>
-              <Text>
-                Creativity fosters productivity while providing a fun change of
-                pace for your team. Let us coordinate an experience that is just
-                right for your group.
-              </Text>
+              <MultiText
+                text={homepageData.corporate}
+                mapKey={"private_events"}
+              />
               <NextLink href="/private-events#corporate-events" passHref>
                 <Button>learn more</Button>
               </NextLink>
@@ -352,7 +391,8 @@ export async function getStaticProps() {
           node {
             id
             title
-            products(first: 4) {
+            descriptionHtml
+            products(first: 6) {
               edges {
                 node {
                   id
@@ -367,6 +407,18 @@ export async function getStaticProps() {
                     value
                   }
                   date: metafield(namespace: "my_fields", key: "date") {
+                    value
+                  }
+                  short_description: metafield(
+                    namespace: "product"
+                    key: "short_description"
+                  ) {
+                    value
+                  }
+                  on_page_title: metafield(
+                    namespace: "product"
+                    key: "on_page_title"
+                  ) {
                     value
                   }
                   variants(first: 1) {

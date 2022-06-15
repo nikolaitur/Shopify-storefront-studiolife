@@ -7,10 +7,11 @@ const themeConfig = {
     brand: {
       black: "#000000",
       white: "#FFFFFF",
-      rose: "#E4D5D4",
-      alabaster: "#E4E2DB",
-      platinum: "#D7E1DC"
-
+      silver: "#9FA49E",
+      magnolia: "#E5E1EA",
+      alabaster: "#e3eae1d",
+      platinum: "#eae6e1",
+      metallic: "#A09EA4"
     },
   },
   fonts: {

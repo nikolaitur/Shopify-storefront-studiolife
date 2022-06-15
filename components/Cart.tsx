@@ -140,7 +140,7 @@ const Cart = () => {
           style={{
             display: 'inline',
           }}
-          boxSize={6}
+          boxSize={7}
         />
         <Text
           fontSize={12}

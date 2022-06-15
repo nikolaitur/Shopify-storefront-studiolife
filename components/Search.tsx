@@ -31,7 +31,7 @@ export function Search({ router }: { router: NextRouter }) {
     <>
       <Icon
         as={AiOutlineSearch}
-        boxSize={6}
+        boxSize={7}
         onClick={onOpen}
         _hover={{
           opacity: 0.4,

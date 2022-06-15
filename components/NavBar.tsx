@@ -1,121 +1,164 @@
-import { Flex, Box, Image, Icon, useColorMode, Stack } from "@chakra-ui/react";
-import { useState, useRef, useEffect, useContext } from "react";
-import { HiOutlineInformationCircle, HiUserCircle } from "react-icons/hi";
+import {
+  Box,
+  Stack,
+  Text,
+  Link,
+  useDisclosure,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Input,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  Divider,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import ShopContext from "lib/ShopContext";
-import { Search } from "./Search";
-import Menu from "./Menu";
 import Cart from "./Cart";
+import { Search } from "./Search";
+import NextLink from "next/link";
+import { useRef } from "react";
+import { HiChevronDown } from "react-icons/hi";
 
-const NavBar = () => {
-  const [showSearch, setSearch] = useState(false);
-  const [auth, setAuth] = useState(false);
+export default function Navbar() {
   const router = useRouter();
-  const { shop } = useContext(ShopContext);
-  const { colorMode } = useColorMode();
-
-  const searchRef = useRef<any>();
-
-  useEffect(() => {
-    async function checkToken() {
-      const token = JSON.parse(
-        window.localStorage.getItem(
-          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
-        )!
-      );
-      if (token) setAuth(true);
-    }
-
-    checkToken();
-  }, []);
-
-  function handleLoginOrAccount() {
-    if (auth) router.push("/account");
-    else router.push("/login");
-  }
 
   return (
-    <Flex
-      justifyContent="space-between"
-      alignItems={["center"]}
-      px={[4, 10]}
-      py={[2, 4]}
-      pos={["fixed"]}
-      zIndex={1}
+    <Box
+      pos="sticky"
       top={0}
       left={0}
-      flexDir={["row", "column"]}
-      w={["100%", 20]}
-      h={["auto", "100vh"]}
-      bg={["white", "whiteAlpha.800"]}
-      shadow={["md", "none"]}
+      zIndex={1}
+      background="white"
+      shadow="sm"
     >
-      <Box py={0}>
-        <Menu />
-      </Box>
-        <Image
-          display={["inherit", "none"]}
-          src={"/studiolife_full_logo.png"}
-          alt="studiolife logo"
-          height={"70px"}
-          onClick={() => router.push("/")}
-          cursor="pointer"
-        />
-        <Image
-          display={["none", "inherit"]}
-          src={"/studiolife_logo_rotated_270.png"}
-          alt="studiolife logo"
-          w={["120px", "70px"]}
-          h={""}
-          maxW="none"
-          onClick={() => router.push("/")}
-          cursor="pointer"
-        />
       <Stack
-        direction={["row", "column"]}
-        justifyContent={"center"}
-        spacing={4}
-        py={4}
+        direction={"row"}
+        justify="space-between"
+        px={8}
+        py={3}
+        align="center"
       >
-        <Icon
-          as={HiUserCircle}
-          color={colorMode === "dark" ? "white" : "black"}
-          h={7}
-          w={7}
-          onClick={handleLoginOrAccount}
-          _hover={{
-            opacity: 0.4,
-          }}
-          transition={"opacity 200ms ease"}
-          display={["none", "inherit"]}
-        />
-          {/* <Icon
-            onClick={() => router.push("/help")}
-            as={HiOutlineInformationCircle}
-            color={colorMode === "dark" ? "white" : "black"}
-            mr={4}
-            h={7}
-            w={7}
-            _hover={{
-              opacity: 0.4,
-            }}
-            transition={"opacity 200ms ease"}
-            display={["none", "inherit"]}
-          /> */}
-        <Stack
-          direction="row"
-          spacing={3}
-          pos={["static", "fixed"]}
-          top={[4, 4, 0]}
-          right={8}
-          zIndex={1}
-        >
-          <Search router={router} />
-          <Cart />
+        <Stack direction="row" align="center" spacing={6}>
+          <MobileMenu />
+          <NextLink href="/" passHref>
+            <Link fontFamily="Julietta" fontSize="4xl" pb={2}>
+              StudioLife
+            </Link>
+          </NextLink>
+          <Menu>
+            <MenuButton as={Link} rightIcon={<HiChevronDown />}>
+              Events &amp; Workshops
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <NextLink href="/collection/workshops" passHref>
+                  <Link>Recorded Workshops</Link>
+                </NextLink>
+              </MenuItem>
+              <MenuItem>
+                <NextLink href="/collection/live-events" passHref>
+                  <Link>Live Events</Link>
+                </NextLink>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          <Divider orientation="vertical" height={"40px"} />
+          <Menu>
+            <MenuButton as={Link} rightIcon={<HiChevronDown />}>
+              Private Events
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <NextLink href="/" passHref>
+                  <Link>Rent The Shop</Link>
+                </NextLink>
+              </MenuItem>
+              <MenuItem>
+              <NextLink href="/" passHref>
+                  <Link>Private &amp; Corporate Events</Link>
+                </NextLink>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          <Divider orientation="vertical" height={"40px"} />
+          <Menu>
+            <MenuButton as={Link} rightIcon={<HiChevronDown />}>
+              More
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <NextLink href="/" passHref>
+                  <Link>About Us</Link>
+                </NextLink>
+              </MenuItem>
+              <MenuItem>
+                <NextLink href="/help" passHref>
+                  <Link>Contact &amp; Help</Link>
+                </NextLink>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Stack>
+        <Stack direction={"row"} align="center" spacing={6}>
+          <Stack direction={"row"} align="center" spacing={4}>
+            <Search router={router} />
+            <Cart />
+          </Stack>
         </Stack>
       </Stack>
-    </Flex>
+    </Box>
   );
-};
+}
 
-export default NavBar;
+function MobileMenu() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef<any>();
+
+  return (
+    <>
+      <Button
+        display={["inherit", "none"]}
+        variant={"ghost"}
+        ref={btnRef}
+        colorScheme="teal"
+        onClick={onOpen}
+      >
+        Menu
+      </Button>
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Create your account</DrawerHeader>
+
+          <DrawerBody>
+            <Input placeholder="Type here..." />
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
