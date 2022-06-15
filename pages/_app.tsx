@@ -8,13 +8,13 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
-import Navbar from 'components/Navbar';
+import NavBar from 'components/Navbar';
 import Footer from 'components/Footer';
 import Head from 'next/head';
 import CartContext from 'lib/CartContext';
 import { useState, useEffect } from 'react';
 import ShopContext from 'lib/ShopContext';
-import '/styles/globals.css';
+import '../styles/globals.css';
 import Tawk from 'lib/tawk';
 import MailingList from 'components/MailingList';
 
@@ -85,7 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/favicon-32x32.png" type="image/x-icon" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
-          <Navbar />
+          <NavBar />
           <Box>
             <Component {...pageProps} />
             <Box

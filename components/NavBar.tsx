@@ -26,7 +26,7 @@ import NextLink from "next/link";
 import { useRef } from "react";
 import { HiChevronDown } from "react-icons/hi";
 
-export default function Navbar() {
+export default function NavBar() {
   const router = useRouter();
 
   return (
