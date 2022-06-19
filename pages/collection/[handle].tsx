@@ -42,8 +42,8 @@ export default function CollectionPage({
         <title>{data.title} | StudioLife</title>
         <meta name="description" content={data.description} />
       </Head>
-      <Stack direction={["column", "row"]} align="center" bgColor={"#eae6e1"}>
-        <Stack spacing={4} p={[2, 20]}>
+      <Stack direction={["column-reverse", "row"]} align="center" bgColor={"#eae6e1"}>
+        <Stack spacing={4} p={[8, 20]}>
           <Heading fontSize="5xl">{data.title}</Heading>
           <Box
             className="class_desc_outer_box"
@@ -52,7 +52,7 @@ export default function CollectionPage({
             }}
           />
         </Stack>
-        <AspectRatio ratio={3 / 2} minW={"50%"}>
+        <AspectRatio ratio={3 / 2} minW={["100%", "50%"]}>
           <Image src={data.image.url} alt={data.title} />
         </AspectRatio>
       </Stack>
