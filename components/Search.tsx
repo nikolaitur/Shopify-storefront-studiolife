@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   Heading,
+  IconButton,
 } from "@chakra-ui/react";
 import { NextRouter } from "next/router";
 import { useState } from "react";
@@ -29,8 +30,10 @@ export function Search({ router }: { router: NextRouter }) {
 
   return (
     <>
-      <Icon
+      <IconButton
+        aria-label="Search"
         as={AiOutlineSearch}
+        variant="ghost"
         boxSize={7}
         onClick={onOpen}
         _hover={{
@@ -47,9 +50,6 @@ export function Search({ router }: { router: NextRouter }) {
           </ModalHeader>
           <ModalBody>
             <InputGroup>
-            {/* {typeof window !== 'undefined' && <InputLeftElement>
-                <Icon as={AiOutlineSearch} />
-              </InputLeftElement>} */}
               <Input
                 variant="outline"
                 placeholder="Find what you're looking for here..."

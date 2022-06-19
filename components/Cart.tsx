@@ -19,7 +19,8 @@ import {
   useNumberInput,
   HStack,
   Input,
-  Heading
+  Heading,
+  IconButton
 } from '@chakra-ui/react';
 import { useEffect, useContext, useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
@@ -135,8 +136,10 @@ const Cart = () => {
         }}
         transition={'opacity 200ms ease'}
       >
-      <Icon
+      <IconButton
           as={HiOutlineShoppingBag}
+          aria-label="Shopping Cart"
+          variant="ghost"
           style={{
             display: 'inline',
           }}
