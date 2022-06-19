@@ -288,7 +288,7 @@ function HomePage({
                 )
               )}
             </Stack>
-            <NextLink href="/collection/on-demand-workshops">
+            <NextLink href="/collection/recorded-workshops">
               <Link>see all</Link>
             </NextLink>
           </VStack>
