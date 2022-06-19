@@ -1,6 +1,6 @@
 import Script from 'next/script';
-import { Container } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Container, chakra } from '@chakra-ui/react';
+
 
 export default function MailingList() {
   return (
@@ -30,7 +30,7 @@ export default function MailingList() {
           })(window, document, 'script', 'https://assets.flodesk.com', '/universal', 'fd');`,
         }}
       />
-      <div id="fd-form-605ccaef568cfe29009980b4"></div>
+      <div id="fd-form-605ccaef568cfe29009980b4" />
       <Script
         strategy="lazyOnload"
         id="flodesk_body"

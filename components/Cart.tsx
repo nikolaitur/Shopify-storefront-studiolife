@@ -131,10 +131,10 @@ const Cart = () => {
           placeItems: 'center',
           transition: 'opacity 200ms ease',
         }}
-        _hover={{
-          opacity: 0.4,
-        }}
-        transition={'opacity 200ms ease'}
+        // _hover={{
+        //   opacity: 0.4,
+        // }}
+        // transition={'opacity 200ms ease'}
       >
       <IconButton
           as={HiOutlineShoppingBag}
@@ -161,7 +161,7 @@ const Cart = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Heading size="lg">Your Cart</Heading>
+            <Heading size="lg">your cart</Heading>
           </DrawerHeader>
           <DrawerBody px={[2, 4]}>
             <VStack

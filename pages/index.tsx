@@ -221,7 +221,7 @@ function HomePage({
         bgImage={aboutImageSrc}
         bgSize={"cover"}
         bgPos={"center"}
-        bgAttachment={"fixed"}
+        bgAttachment={["scroll", "fixed"]}
       >
         <Container py={40} maxW="container.lg" pos="relative">
           <VStack

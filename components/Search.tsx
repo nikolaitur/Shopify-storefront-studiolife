@@ -36,17 +36,17 @@ export function Search({ router }: { router: NextRouter }) {
         variant="ghost"
         boxSize={7}
         onClick={onOpen}
-        _hover={{
-          opacity: 0.4,
-        }}
-        transition={"opacity 200ms ease"}
+        // _hover={{
+        //   opacity: 0.4,
+        // }}
+        // transition={"opacity 200ms ease"}
       />
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent py={4} mx={4}>
           <ModalCloseButton />
           <ModalHeader>
-            <Heading>Search StudioLife</Heading>
+            <Heading>search StudioLife</Heading>
           </ModalHeader>
           <ModalBody>
             <InputGroup>
