@@ -101,7 +101,7 @@ function HomePage({
           <Heading size="xl" as="h2">
             {homepageData.belowTheFold.title}
           </Heading>
-          <Text maxW={["full", "50%"]}>{homepageData.belowTheFold.text}</Text>
+          <Text pb={4} maxW={["full", "50%"]}>{homepageData.belowTheFold.text}</Text>
           <SimpleGrid
             templateColumns={["repeate(1, 1fr)", "repeat(3, 1fr)"]}
             gap={6}
