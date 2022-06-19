@@ -105,6 +105,7 @@ function HomePage({
           <SimpleGrid
             templateColumns={["repeate(1, 1fr)", "repeat(3, 1fr)"]}
             gap={6}
+            px={[2, 0]}
           >
             <GridItem
               shadow="md"
@@ -179,6 +180,7 @@ function HomePage({
             <Stack
               direction={["column", "row"]}
               justify="center"
+              align="center"
               spacing={6}
               w="full"
             >
@@ -258,6 +260,7 @@ function HomePage({
             <Stack
               direction={["column", "row"]}
               justify="center"
+              align="center"
               spacing={6}
               w="full"
             >
@@ -352,7 +355,7 @@ function HomePage({
             shadow="md"
             p={8}
           >
-            <Stack spacing={4} alignItems={"flex-start"}>
+            <Stack spacing={4} px={[2, 0]} alignItems={"flex-start"}>
               <Heading>corporate events</Heading>
               <MultiText
                 text={homepageData.corporate}
