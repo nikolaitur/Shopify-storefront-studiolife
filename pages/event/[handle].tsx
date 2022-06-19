@@ -76,7 +76,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
         <Box flexGrow={1} maxW={["full", "50%"]}>
           <PhotoCarousel images={product.images.edges} />
         </Box>
-        <Stack direction={["column"]} spacing={8} p={20}  maxW={["full", "50%"]}>
+        <Stack direction={["column"]} spacing={8} p={[8, 20]}  maxW={["full", "50%"]}>
           <Stack
             pt={[20]}
             direction={"column"}
