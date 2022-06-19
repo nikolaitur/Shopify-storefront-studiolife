@@ -11,18 +11,18 @@ import {
   SimpleGrid,
   Textarea,
   Input,
-} from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+  useToast,
+} from "@chakra-ui/react";
+import { useRef, useState } from "react";
 import {
   HiOutlineCollection,
   HiOutlineDesktopComputer,
   HiOutlineGift,
   HiOutlineUserAdd,
   HiOutlineVideoCamera,
-} from 'react-icons/hi';
-import { useFormik } from 'formik';
-import MailingList from '../components/MailingList';
-import Head from 'next/head';
+} from "react-icons/hi";
+import { useFormik } from "formik";
+import Head from "next/head";
 
 export default function Partner() {
   const workForm = useRef<HTMLDivElement | null>(null);
@@ -33,17 +33,17 @@ export default function Partner() {
         <title>Partner With Us | StudioLife</title>
       </Head>
       <Box
-        bgImage={'/photos/sarah-book-celebration.jpg'}
+        bgImage={"/photos/sarah-book-celebration.jpg"}
         bgSize="cover"
         bgPos="center bottom"
       >
         <Container py={80}>
-          <Stack textAlign={'center'} align="center">
+          <Stack textAlign={"center"} align="center">
             <Text>share your craft with a new audience</Text>
             <Heading>creating space and opportunity</Heading>
             <Button
               onClick={() =>
-                workForm.current?.scrollIntoView({ behavior: 'smooth' })
+                workForm.current?.scrollIntoView({ behavior: "smooth" })
               }
             >
               Work With Us!
@@ -52,7 +52,7 @@ export default function Partner() {
         </Container>
       </Box>
       <Container maxW="container.lg" py={20}>
-        <Stack textAlign={'center'} align="center" spacing={8}>
+        <Stack textAlign={"center"} align="center" spacing={8}>
           <Box>
             <Text>new audiences, brought to you</Text>
             <Heading>
@@ -73,7 +73,7 @@ export default function Partner() {
         </Stack>
       </Container>
       <Box
-        bgImage={'/photos/partner-with-us.jpg'}
+        bgImage={"/photos/partner-with-us.jpg"}
         bgSize="cover"
         bgPos="center"
         pt={20}
@@ -87,13 +87,13 @@ export default function Partner() {
           borderRadius={10}
         >
           <Stack spacing={8} align="center">
-            <Box textAlign={'center'}>
-              <Text fontSize={'sm'}>how it works</Text>
-              <Heading size={'xl'}>
+            <Box textAlign={"center"}>
+              <Text fontSize={"sm"}>how it works</Text>
+              <Heading size={"xl"}>
                 events at <span className="studiolife">StudioLife</span>
               </Heading>
             </Box>
-            <Stack direction={['column', 'row']} textAlign="center" spacing={8}>
+            <Stack direction={["column", "row"]} textAlign="center" spacing={8}>
               <Box maxW={["full", "20%"]}>
                 <Icon as={HiOutlineUserAdd} boxSize={8} />
                 <Text>event marketing &amp; registration</Text>
@@ -122,7 +122,7 @@ export default function Partner() {
         <Stack spacing={8} align="center">
           <Heading>pricing &amp; fee</Heading>
           <Divider w="200px" />
-          <Stack direction={['column', 'row']} spacing={8} justify="center">
+          <Stack direction={["column", "row"]} spacing={8} justify="center">
             <Box
               textAlign="center"
               p={8}
@@ -171,67 +171,45 @@ export default function Partner() {
         </Stack>
       </Container>
       <Container py={40} ref={workForm}>
-        <Heading mb={8}>Let&apos;s Create Something</Heading>
+        <Heading mb={8}>Let&apos;s Create Space Together</Heading>
         <PartnerContactForm />
-      </Container>
-      <Container pt={20} pb={40} maxW="container.lg">
-        <MailingList />
       </Container>
     </>
   );
 }
 
 function PartnerContactForm() {
-  const [formStatus, setStatus] = useState('unsubmitted');
+  const [formStatus, setStatus] = useState("unsubmitted");
+
+  const toast = useToast();
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      phone: '',
-      email: '',
-      message: '',
+      name: "",
+      phone: "",
+      email: "",
+      message: "",
     },
     onSubmit: async (values) => {
-      const response = await fetch('/api/artistform', {
-        method: 'POST',
+      await fetch("https://submit-form.com/VsIEICRe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify(values),
       });
-
-      console.log(response);
-
-      if (response.status === 200) {
-        formik.resetForm();
-        formik.setSubmitting(false);
-        setStatus('submitted');
-      } else if (response.status === 500) {
-        formik.setSubmitting(false);
-        setStatus('error');
-      }
+      
+      toast({
+        title: "Form Submitted!",
+        description:
+          "We've received your response and will respond as soon as possible!",
+      });
     },
   });
 
-  if (formStatus === 'submitted')
-    return (
-      <Box p={0}>
-        <Divider mb={4} />
-        <Stack spacing={4}>
-          <Heading>Thank You!</Heading>
-          <Text>
-            We look forward to connecting with you and creating something
-            amazing!
-          </Text>
-        </Stack>
-      </Box>
-    );
-
   return (
     <form onSubmit={formik.handleSubmit}>
-      {formStatus === 'error' && (
-        <Text py={4}>
-          Something went wrong last time. Chat us with the icon in the bottom
-          corner!
-        </Text>
-      )}
       <SimpleGrid templateColumns={`repeat(2, 1fr)`} gap={6} w="full">
         <GridItem colSpan={[2, 1]}>
           <Input
@@ -267,9 +245,9 @@ function PartnerContactForm() {
             value={formik.values.message}
           />
         </GridItem>
-        <GridItem placeItems={'center'}>
+        <GridItem placeItems={"center"}>
           <Button
-            textAlign={'center'}
+            textAlign={"center"}
             isLoading={formik.isSubmitting}
             type="submit"
             loadingText="Submitting..."

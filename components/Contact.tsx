@@ -1,41 +1,15 @@
 import {
-  Box,
-  Container,
-  Heading,
   GridItem,
   SimpleGrid,
-  Stack,
   Button,
   Textarea,
   Input,
-  Text,
-  Divider,
+  useToast,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import Head from 'next/head';
-import { useState } from 'react';
 import { useFormik } from 'formik';
 
-export default function Contact() {
-  return (
-    <Container maxW="container.md" py={40}>
-      <Head>
-        <title>Contact Us | StudioLife</title>
-      </Head>
-      <Stack spacing={8}>
-        <Heading size="2xl">Contact Us</Heading>
-        <Text>
-          We love (virtual) mail! Drop us a line below, and we&apos;ll get back
-          to you as soon as possible.
-        </Text>
-        <ContactForm />
-      </Stack>
-    </Container>
-  );
-}
-
-export function ContactForm() {
-  const [formStatus, setStatus] = useState('unsubmitted');
+export default function ContactForm() {
+  const toast = useToast()
 
   const formik = useFormik({
     initialValues: {
@@ -45,46 +19,25 @@ export function ContactForm() {
       message: '',
     },
     onSubmit: async (values) => {
-      const response = await fetch('/api/hello', {
-        method: 'POST',
+      await fetch("https://submit-form.com/qtpgENTs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify(values),
       });
-
-      console.log(response);
-
-      if (response.status === 200) {
-        formik.resetForm();
-        formik.setSubmitting(false);
-        setStatus('submitted');
-      } else if (response.status === 500) {
-        formik.setSubmitting(false);
-        setStatus('error');
-      }
+      
+      toast({
+        title: "Form Submitted!",
+        description:
+          "We've received your response and will respond as soon as possible!",
+      });
     },
   });
 
-  if (formStatus === 'submitted')
-    return (
-      <Box p={0}>
-        <Divider mb={4} />
-        <Stack spacing={4}>
-          <Heading>Thank You!</Heading>
-          <Text>
-            We look forward to connecting with you and creating something
-            amazing!
-          </Text>
-        </Stack>
-      </Box>
-    );
-
   return (
     <form onSubmit={formik.handleSubmit}>
-      {formStatus === 'error' && (
-        <Text py={4}>
-          Something went wrong last time. Chat us with the icon in the bottom
-          corner!
-        </Text>
-      )}
       <SimpleGrid templateColumns={`repeat(2, 1fr)`} gap={6} w="full">
         <GridItem colSpan={[2, 1]}>
           <Input

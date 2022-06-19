@@ -12,6 +12,8 @@
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@formspark/use-formspark": "^0.1.39",
+    "@popmotion/popcorn": "^0.4.4",
     "@portabletext/react": "^1.0.6",
     "@sanity/image-url": "^1.0.1",
     "@smakss/search": "^1.2.2",

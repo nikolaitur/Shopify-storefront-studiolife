@@ -14,6 +14,14 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -22,6 +30,8 @@ import CartContext from "lib/CartContext";
 import formatter from "lib/formatter";
 import { FaClock, FaUserGraduate } from "react-icons/fa";
 import { GetStaticPropsContext } from "next";
+import MultiText from "lib/MultiText";
+import PhotoCarousel from "components/PhotoCarousel";
 
 //to-do: add "associated products" so that they can add additional kits like with Lettering for Light
 
@@ -32,6 +42,8 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
 
     return product.variants.edges[0].node.id;
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const variants = product?.variants.edges;
 
@@ -66,65 +78,85 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
         </title>
       </Head>
       <Flex flexDirection={["column", "row"]}>
-        <AspectRatio
-          ratio={1 / 1}
-          w={["full", "50%"]}
-          pos={["static", "sticky"]}
-          top={0}
-        >
-          <Image
-            src={product.images.edges[0].node.src}
-            alt={``}
-            maxH={["400px", "100vh"]}
+        <Box flexGrow={1} maxW={["full", "50%"]}>
+          <PhotoCarousel images={product.images.edges} />
+        </Box>
+        <Stack direction={["column"]} spacing={8} p={20}  maxW={["full", "50%"]}>
+          <Stack direction={"column"} spacing={2} alignItems={"flex-start"}>
+            <Heading>
+              {product.on_page_title?.value
+                ? product.on_page_title.value
+                : product.title}
+            </Heading>
+            <HStack spacing={2}>
+              <Tag size="lg">
+                <TagLeftIcon boxSize={4} as={FaUserGraduate} />
+                <TagLabel>{product.teacher?.value}</TagLabel>
+              </Tag>
+              <Tag size="lg">
+                <TagLeftIcon boxSize={4} as={FaClock} />
+                <TagLabel>{product.duration?.value}</TagLabel>
+              </Tag>
+            </HStack>
+          </Stack>
+          <Divider />
+          <MultiText
+            text={
+              product.short_description?.value
+                ? product.short_description.value
+                : ""
+            }
+            mapKey={"desc"}
           />
-        </AspectRatio>
-        <Container centerContent pt={20} pb={20}>
-          <Stack direction={["column"]} spacing={8} w="full">
-            <Stack direction={"column"} spacing={2} alignItems={"flex-start"}>
-              <Heading>{product.title}</Heading>
-              <HStack spacing={2}>
-                <Tag size="lg">
-                  <TagLeftIcon boxSize={4} as={FaUserGraduate} />
-                  <TagLabel>{product.teacher?.value}</TagLabel>
-                </Tag>
-                <Tag size="lg">
-                  <TagLeftIcon boxSize={4} as={FaClock} />
-                  <TagLabel>{product.duration?.value}</TagLabel>
-                </Tag>
-              </HStack>
-            </Stack>
-            <Divider />
-            <Stack spacing={4}>
-              <Text fontSize={24} fontWeight={600}>
-                {checkPrice(variantId)}
-              </Text>
-              {variants.length > 1 && (
-                <Select
-                  value={variantId}
-                  onChange={(e) => {
-                    setVariantId(e.target.value);
-                    checkPrice(e.target.value);
-                  }}
-                >
-                  {variants.map((v: any, i: number) => (
-                    <option key={v.node.id} value={v.node.id}>
-                      {v.node.title}
-                    </option>
-                  ))}
-                </Select>
-              )}
-              <Button alignSelf={"flex-start"} onClick={addToCart}>
-                Add To Cart
-              </Button>
-            </Stack>
-            <Text
+          <Button variant="outline" onClick={onOpen}>
+            Read Full Description
+          </Button>
+          <Stack spacing={4}>
+            <Text fontSize={24} fontWeight={600}>
+              {checkPrice(variantId)}
+            </Text>
+            {variants.length > 1 && (
+              <Select
+                value={variantId}
+                onChange={(e) => {
+                  setVariantId(e.target.value);
+                  checkPrice(e.target.value);
+                }}
+              >
+                {variants.map((v: any, i: number) => (
+                  <option key={v.node.id} value={v.node.id}>
+                    {v.node.title}
+                  </option>
+                ))}
+              </Select>
+            )}
+            <Button size="lg" alignSelf={"flex-start"} onClick={addToCart}>
+              Add To Cart
+            </Button>
+          </Stack>
+        </Stack>
+      </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Full Description</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box
+              className="class_desc_outer_box"
               dangerouslySetInnerHTML={{
                 __html: product.descriptionHtml,
               }}
-            ></Text>
-          </Stack>
-        </Container>
-      </Flex>
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Add To Cart
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
@@ -160,6 +192,18 @@ export async function getStaticPaths() {
             date: metafield(namespace: "my_fields", key: "date") {
               value
             }
+            short_description: metafield(
+              namespace: "product"
+              key: "short_description"
+            ) {
+              value
+            }
+            on_page_title: metafield(
+              namespace: "product"
+              key: "on_page_title"
+            ) {
+              value
+            }
             variants(first: 100) {
               edges {
                 node {
@@ -174,7 +218,7 @@ export async function getStaticPaths() {
             images(first: 10) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }
@@ -232,6 +276,18 @@ export async function getStaticProps(context: GetStaticPropsContext) {
       date: metafield(namespace: "my_fields", key: "date") {
         value
       }
+      short_description: metafield(
+        namespace: "product"
+        key: "short_description"
+      ) {
+        value
+      }
+      on_page_title: metafield(
+        namespace: "product"
+        key: "on_page_title"
+      ) {
+        value
+      }
       variants(first: 100) {
         edges {
           node {
@@ -246,7 +302,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
       images(first: 10) {
         edges {
           node {
-            src
+            url
           }
         }
       }

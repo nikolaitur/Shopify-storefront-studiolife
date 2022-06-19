@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 import dayjs from "dayjs";
 
 const EventCard = dynamic<any>(
-  () => import("https://framer.com/m/Event-Card-p1O7.js@5qgLxSYGg46IfCaNup8C"!),
+  () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
   { ssr: false }
 );
 
@@ -38,10 +38,10 @@ export default function CollectionPage({
 
   return (
     <>
-        <Head>
-          <title>{data.title} | StudioLife</title>
-          <meta name="description" content={data.description} />
-        </Head>
+      <Head>
+        <title>{data.title} | StudioLife</title>
+        <meta name="description" content={data.description} />
+      </Head>
       <Stack direction={["column", "row"]} align="center" bgColor={"#eae6e1"}>
         <Stack spacing={4} p={[2, 20]}>
           <Heading fontSize="5xl">{data.title}</Heading>
@@ -77,31 +77,49 @@ export default function CollectionPage({
               .filter((p: any) =>
                 p.node.title.toLowerCase().includes(searchTerm.toLowerCase())
               )
-              .map((p: any) => (
-                <Box key={p.node.id}>
-                  <EventCard
-                    // Using default values:
-                    date={dayjs(p.node.date?.value).format("MMMM DD, YYYY")}
-                    duration={p.node.duration?.value}
-                    eventName={p.node.on_page_title?.value}
-                    eventType={p.node.productType}
-                    image={p.node.images.edges[0].node.transformedSrc}
-                    shortDesc={
-                      p.node.short_description?.value
-                        ? p.node.short_description?.value
-                        : "No description found. Click Sign Up to learn more."
-                    }
-                    teacher={p.node.teacher.value}
-                    time={dayjs(p.node.date?.value).format("hh:mm A PST")}
-                    tap={() => router.push(`/event/${p.node.handle}`)}
-                    variant={
-                      p.node.productType === "On-Demand Workshop"
-                        ? "Workshop"
-                        : "LiveEvent"
-                    }
-                  />
-                </Box>
-              ))}
+              .map((p: any) => {
+                if (dayjs().isAfter(dayjs(p.node.cut_off_date?.value)))
+                  return null;
+
+                return (
+                  <Box key={p.node.id}>
+                    <EventCard
+                      // Using default values:
+                      date={dayjs(p.node.date?.value).format("MMMM DD, YYYY")}
+                      duration={p.node.duration?.value}
+                      eventName={p.node.on_page_title?.value}
+                      eventType={p.node.productType}
+                      image={p.node.images.edges[0].node.transformedSrc}
+                      shortDesc={
+                        p.node.short_description?.value
+                          ? p.node.short_description?.value
+                          : "No description found. Click Sign Up to learn more."
+                      }
+                      teacher={p.node.teacher.value}
+                      time={dayjs(p.node.date?.value).format("hh:mm A PST")}
+                      tap={() =>
+                        router.push(
+                          `/${
+                            p.node.productType === "On-Demand Workshop"
+                              ? "/workshop"
+                              : "event"
+                          }/${p.node.handle}`
+                        )
+                      }
+                      variant={
+                        p.node.productType === "On-Demand Workshop"
+                          ? "Workshop"
+                          : "LiveEvent"
+                      }
+                      cta={
+                        p.node.productType === "On-Demand Workshop"
+                          ? "buy now"
+                          : "sign up"
+                      }
+                    />
+                  </Box>
+                );
+              })}
             {data.products.edges.length === 0 && (
               <Stack textAlign={"center"} spacing={6}>
                 <Heading fontSize="4xl">More events are in the works!</Heading>
@@ -176,6 +194,9 @@ export async function getStaticProps(context: GetStaticPropsContext) {
                         namespace: "product"
                         key: "on_page_title"
                       ) {
+                        value
+                      }
+                      cut_off_date: metafield(namespace: "custom", key: "last_day_to_sign_up") {
                         value
                       }
                       variants(first: 1) {

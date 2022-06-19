@@ -14,9 +14,11 @@ import {
 import { groq } from 'next-sanity';
 import { getClient } from 'lib/sanity';
 import Head from 'next/head';
+import ContactForm from 'components/contact';
+import { useRef } from 'react';
 
 export default function FAQ({ data }: { data: any }) {
-  if (!data) return null;
+  const form = useRef<HTMLDivElement>(null)
 
   return (
     <>
@@ -28,21 +30,20 @@ export default function FAQ({ data }: { data: any }) {
           <Heading size="2xl">{data.heading}</Heading>
           <Text my={4}>{data.subheading}</Text>
           <Stack direction="row">
-            {data.heroButton !== '' && data.heroButton && (
               <Button
+                onClick={() => form.current?.scrollIntoView({behavior: 'smooth'})}
                 variant="outline"
                 _hover={{ color: 'gray.700', background: 'White' }}
               >
-                {data.heroButton}
+                Contact Us
               </Button>
-            )}
             <Button variant={"outline"} onClick={() => typeof window !== 'undefined' && window.Tawk_API.maximize()}>
               Chat Now
             </Button>
           </Stack>
         </Container>
       </Box>
-      <Box w="full" py={20}>
+      <Box w="full" pt={20} pb={0}>
         <Container maxW="container.lg">
           <Stack direction={['column', 'row']} spacing={20}>
             <Text>{data.paragraphOne}</Text>
@@ -50,6 +51,12 @@ export default function FAQ({ data }: { data: any }) {
           </Stack>
         </Container>
       </Box>
+      <Container py={20} ref={form}>
+        <Stack spacing={6}>
+          <Heading textAlign={"center"}>Send us a Message</Heading>
+          <ContactForm />
+        </Stack>
+      </Container>
     </>
   );
 }

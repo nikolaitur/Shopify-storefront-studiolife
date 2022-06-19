@@ -12,6 +12,14 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -20,6 +28,7 @@ import CartContext from "lib/CartContext";
 import formatter from "lib/formatter";
 import { FaBox, FaClock, FaUserGraduate, FaUsers } from "react-icons/fa";
 import dayjs from "dayjs";
+import PhotoCarousel from "components/PhotoCarousel";
 
 //to-do: add "associated products" so that they can add additional kits like with Lettering for Light
 
@@ -30,6 +39,8 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
 
     return product.variants.edges[0].node.id;
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const variants = product?.variants.edges;
 
@@ -59,25 +70,13 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
   return (
     <>
       <Head>
-        <title>
-          {product.title} | {process.env.NX_NEXT_PUBLIC_SHOP_NAME}
-        </title>
+        <title>{product.title} | StudioLife</title>
       </Head>
       <Flex flexDirection={["column", "row"]} alignItems="flex-start">
-        <AspectRatio
-          ratio={1 / 1}
-          minH="100vh"
-          w={["full", "50%"]}
-          pos={["static", "sticky"]}
-          top={0}
-        >
-          <Image
-            src={product.images.edges[0].node.src}
-            alt={``}
-            maxH={["400px", "100vh"]}
-          />
-        </AspectRatio>
-        <Stack direction={["column"]} spacing={8} maxW={["full", "50%"]}>
+        <Box flexGrow={1} maxW={["full", "50%"]}>
+          <PhotoCarousel images={product.images.edges} />
+        </Box>
+        <Stack direction={["column"]} spacing={8} p={20}  maxW={["full", "50%"]}>
           <Stack
             pt={[20]}
             direction={"column"}
@@ -146,16 +145,29 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
               </Stack>
             </Stack>
           </Stack>
-          <Box
-            pb={20}
-            px={[2, 10]}
-            className="class_desc_outer_box"
-            dangerouslySetInnerHTML={{
-              __html: product.descriptionHtml,
-            }}
-          ></Box>
         </Stack>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Full Description</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box
+              className="class_desc_outer_box"
+              dangerouslySetInnerHTML={{
+                __html: product.descriptionHtml,
+              }}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Add To Cart
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
@@ -255,6 +267,18 @@ export async function getStaticProps(context: any) {
         value
       }
       is_virtual: metafield(namespace: "product", key: "is_virtual") {
+        value
+      }
+      short_description: metafield(
+        namespace: "product"
+        key: "short_description"
+      ) {
+        value
+      }
+      on_page_title: metafield(
+        namespace: "product"
+        key: "on_page_title"
+      ) {
         value
       }
       variants(first: 100) {

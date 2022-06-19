@@ -58,13 +58,13 @@ const Navbar = () => {
             </MenuButton>
             <MenuList>
               <MenuItem>
-                <NextLink href="/collection/workshops" passHref>
-                  <Link>Recorded Workshops</Link>
+                <NextLink href="/collection/live-events" passHref>
+                  <Link>Live Events</Link>
                 </NextLink>
               </MenuItem>
               <MenuItem>
-                <NextLink href="/collection/live-events" passHref>
-                  <Link>Live Events</Link>
+                <NextLink href="/collection/recorded-workshops" passHref>
+                  <Link>Recorded Workshops</Link>
                 </NextLink>
               </MenuItem>
             </MenuList>
@@ -77,12 +77,12 @@ const Navbar = () => {
             <MenuList>
               <MenuItem>
                 <NextLink href="/" passHref>
-                  <Link>Rent The Shop</Link>
+                  <Link>Private &amp; Corporate Events</Link>
                 </NextLink>
               </MenuItem>
               <MenuItem>
-              <NextLink href="/" passHref>
-                  <Link>Private &amp; Corporate Events</Link>
+                <NextLink href="/" passHref>
+                  <Link>Rent The Shop</Link>
                 </NextLink>
               </MenuItem>
             </MenuList>
@@ -94,13 +94,18 @@ const Navbar = () => {
             </MenuButton>
             <MenuList>
               <MenuItem>
-                <NextLink href="/" passHref>
+                <NextLink href="/partner" passHref>
+                  <Link>Partner with Us</Link>
+                </NextLink>
+              </MenuItem>
+              <MenuItem>
+                <NextLink href="/about" passHref>
                   <Link>About Us</Link>
                 </NextLink>
               </MenuItem>
               <MenuItem>
                 <NextLink href="/help" passHref>
-                  <Link>Contact &amp; Help</Link>
+                  <Link>Help &amp; Contact</Link>
                 </NextLink>
               </MenuItem>
             </MenuList>
@@ -115,7 +120,7 @@ const Navbar = () => {
       </Stack>
     </Box>
   );
-}
+};
 
 function MobileMenu() {
   const { isOpen, onOpen, onClose } = useDisclosure();

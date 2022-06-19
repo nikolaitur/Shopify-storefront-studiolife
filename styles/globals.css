@@ -63,8 +63,10 @@ div[data-framer-component-type='Text'] span {
 
 .class_desc_outer_box > ul {
   margin-top: 18px;
+  list-style-position: inside;
 }
 
 .class_desc_outer_box > ul > li {
   margin-top: 12px;
+  
 }

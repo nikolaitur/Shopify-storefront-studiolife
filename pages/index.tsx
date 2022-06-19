@@ -26,7 +26,7 @@ import dayjs from "dayjs";
 import MultiText from "lib/MultiText";
 
 const EventCard = dynamic<any>(
-  () => import("https://framer.com/m/Event-Card-p1O7.js@5qgLxSYGg46IfCaNup8C"!),
+  () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
   { ssr: false }
 );
 
@@ -201,6 +201,7 @@ function HomePage({
                       time={dayjs(node.date?.value).format("hh:mm A PST")}
                       tap={() => router.push(`/event/${node.handle}`)}
                       variant="LiveEvent"
+                      cta="Sign Up"
                     />
                   </Box>
                 )
@@ -246,7 +247,7 @@ function HomePage({
       <Container pt={20} pb={20} maxW="container.lg" ref={featuredWorkshops}>
         {collections.edges[1]?.node.products.edges.length > 0 && (
           <VStack spacing={6} alignItems={"center"} w="full">
-            <Heading size="xl">featured workshops</Heading>
+            <Heading size="xl">recorded workshops</Heading>
             <Box
               maxW={["full", "80%"]}
               textAlign="center"
@@ -278,6 +279,7 @@ function HomePage({
                       time={dayjs(node.date?.value).format("hh:mm A PST")}
                       tap={() => router.push(`/workshop/${node.handle}`)}
                       variant="Workshop"
+                      cta={"buy now"}
                     />
                   </Box>
                 )
