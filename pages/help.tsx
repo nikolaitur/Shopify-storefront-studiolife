@@ -14,7 +14,7 @@ import {
 import { groq } from 'next-sanity';
 import { getClient } from 'lib/sanity';
 import Head from 'next/head';
-import ContactForm from 'components/contact';
+import ContactForm from 'components/Contact';
 import { useRef } from 'react';
 
 export default function FAQ({ data }: { data: any }) {

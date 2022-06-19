@@ -3,7 +3,7 @@ import { ImNewspaper } from 'react-icons/im'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'post',
-  title: 'Post',
+  title: 'Blog Posts',
   type: 'document',
   icon: ImNewspaper,
   fields: [

@@ -12,6 +12,7 @@ import {
   Link,
   useToast,
   ToastMessage,
+  ToastProps,
 } from "@chakra-ui/react";
 import { NextRouter, useRouter } from "next/router";
 import NextLink from "next/link";
@@ -83,7 +84,7 @@ function SignIn({
 }: {
   shop: { name: string };
   router: NextRouter;
-  toast: ToastMessage;
+  toast: any;
 }) {
   const [show, toggle] = useState(false);
   const [loginFailed, setFailed] = useState(false);
@@ -117,7 +118,11 @@ function SignIn({
     if (response.customerUserErrors) {
       console.log(response);
       setFailed(true);
-      //add toast
+      toast({
+        title: "Login failed.",
+        description: "Double check your email and password.",
+        status: 'error'
+      })
 
       return;
     }

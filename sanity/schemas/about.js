@@ -1,4 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
+
+import { m } from "framer-motion";
+
 // studio/schemas/about.js
 export default {
   name: "about",
@@ -10,47 +13,219 @@ export default {
   // This means, users can't delete this document
   // from within the studio
   __experimental_actions: ["update", "create", "publish"],
-
+  groups: [
+    {
+      name: 'content',
+      title: 'Content',
+      default: true
+    },
+    {
+      name: 'seo',
+      title: 'SEO',
+    }
+  ],
   fields: [
     {
-      title: "Page Heading",
-      description:
-        "This heading will appeart at the top of the page",
-      type: "string",
-      name: "heading",
+      name: 'largeText',
+      title: 'Large Text',
+      description: "Originally 'what if...'",
+      group: 'content',
+      type: 'string'
     },
     {
-      title: "Subheading",
-      description:
-        "This subheading will appeart at the top of the page",
-      type: "string",
-      name: "subheading",
+      name: 'secondText',
+      title: 'Second Text',
+      description: 'Text directly under Large Text',
+      group: 'content',
+      type: 'string'
     },
     {
-      name: 'description',
-      type: 'text',
-      title: 'Description'
+      name: 'imageSection1',
+      title: 'Image Section 1',
+      group: 'content',
+      type: 'object',
+      fields: [
+        {
+          name: 'image',
+          title: 'Image',
+          type: 'image',
+        },
+        {
+          name: 'imageAlt',
+          title: 'Image Alt Text',
+          type: 'string'
+        },
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string'
+        },
+        {
+          name: 'text',
+          title: 'Text',
+          type: 'string'
+        },
+        
+      ],
     },
     {
-      name: 'image1',
-      title: 'First Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
+      name: 'accentText',
+      title: 'Accent Text',
+      group: 'content',
+      type: 'text'
     },
     {
-      name: 'image2',
-      title: 'Second Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
+      name: 'meet',
+      title: 'Meet Brooke & Kristi',
+      type: 'object',
+      group: 'content',
+      fields: [
+        {
+          name: 'image',
+          title: 'Image',
+          type: 'image'
+        },
+        {
+          name: 'imageAlt',
+          title: 'Image Alt Text',
+          type: 'string'
+        },
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string'
+        },
+        {
+          name: 'text',
+          title: 'Text',
+          type: 'text'
+        }
+      ]
     },
     {
-      name: 'textUnderImg2',
-      type: 'text',
-      title: 'Text under Second Image'
+      name: 'shop',
+      title: 'About The Shop',
+      group: 'content',
+      type: 'object',
+      fields: [
+        {
+          name: 'image',
+          title: 'Image',
+          type: 'image'
+        },
+        {
+          name: 'heading',
+          title: 'Heading',
+          type: 'string'
+        },
+        {
+          name: 'text',
+          type: 'text'
+        },
+        {
+          name: 'buttons',
+          type: 'object',
+          fields: [
+            {
+              name: 'button1',
+              type: 'object',
+              fields: [{
+                name: 'text',
+                type: 'string'
+              },{
+                name: 'url',
+                type: 'string'
+              }]
+            },
+            {
+              name: 'button2',
+              type: 'object',
+              fields: [{
+                name: 'text',
+                type: 'string'
+              },{
+                name: 'url',
+                type: 'string'
+              }]
+            }
+          ]
+        }
+      ]
     },
+    {
+      name: 'accentText2',
+      title: 'Accent Text 2',
+      group: 'content',
+      type: 'text'
+    },
+    {
+      name: 'story',
+      type: 'object',
+      group: 'content',
+      fields: [
+        {
+          name: 'mainHeading',
+          type: 'string'
+        },
+        {
+          name: 'part1',
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              type: 'image'
+            },
+            {
+              name: 'imageAlt',
+              type: 'string'
+            },
+            {
+              name: 'heading',
+              type: 'string'
+            },
+            {
+              name: 'text',
+              type: 'text'
+            }
+          ]
+        },
+        {
+          name: 'part2',
+          type: 'object',
+          fields: [
+            {
+              name: 'image',
+              type: 'image'
+            },
+            {
+              name: 'imageAlt',
+              type: 'string'
+            },
+            {
+              name: 'heading',
+              type: 'string'
+            },
+            {
+              name: 'text',
+              type: 'text'
+            }
+          ]
+        },
+        {
+          name: 'part3',
+          type: 'object',
+          fields: [
+            {
+              name: 'heading',
+              type: 'string'
+            },
+            {
+              name: 'text',
+              type: 'text'
+            }
+          ]
+        }
+      ]
+    }
   ],
 };

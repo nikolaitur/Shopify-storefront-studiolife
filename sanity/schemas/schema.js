@@ -27,12 +27,13 @@ export default createSchema({
     // in the studio.
     homepage,
     about,
-    eventType,
-    post,
     help,
-    faq,
-    review,
+
     author,
+    post,
+    faq,
+    eventType,
+    review,
     category,
     // When added to this list, object types can be used as
     // { type: 'typename' } in other document schemas

@@ -23,18 +23,38 @@ import { useRouter } from "next/router";
 import Cart from "./Cart";
 import { Search } from "./Search";
 import NextLink from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiChevronDown } from "react-icons/hi";
 
 const Navbar = () => {
   const router = useRouter();
+  const [auth, setAuth] = useState(false);
+
+
+  useEffect(() => {
+    async function checkToken() {
+      const token = JSON.parse(
+        window.localStorage.getItem(
+          `${process.env.NEXT_PUBLIC_SHOP_NAME}:supershops:accessToken`
+        )!
+      );
+      if (token) setAuth(true);
+    }
+
+    checkToken();
+  }, [window]);
+
+  function handleLoginOrAccount() {
+    if (auth) router.push("/account");
+    else router.push("/login");
+  }
 
   return (
     <Box
       pos="sticky"
       top={0}
       left={0}
-      zIndex={1}
+      zIndex={2}
       background="white"
       shadow="sm"
     >
@@ -76,12 +96,12 @@ const Navbar = () => {
             </MenuButton>
             <MenuList>
               <MenuItem>
-                <NextLink href="/" passHref>
+                <NextLink href="/private-events" passHref>
                   <Link>Private &amp; Corporate Events</Link>
                 </NextLink>
               </MenuItem>
               <MenuItem>
-                <NextLink href="/" passHref>
+                <NextLink href="/private-events#space-rentals" passHref>
                   <Link>Rent The Shop</Link>
                 </NextLink>
               </MenuItem>
@@ -113,6 +133,7 @@ const Navbar = () => {
         </Stack>
         <Stack direction={"row"} align="center" spacing={6}>
           <Stack direction={"row"} align="center" spacing={4}>
+            <Link onClick={handleLoginOrAccount}>{auth ? "Account" : "Log in"}</Link>
             <Search router={router} />
             <Cart />
           </Stack>
