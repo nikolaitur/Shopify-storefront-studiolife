@@ -74,20 +74,34 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
     <>
       <Head>
         <title>
-          {product.title} | {process.env.NEXT_PUBLIC_SHOP_NAME!}
+          {product.on_page_title?.value
+            ? product.on_page_title.value
+            : product.title}{" "}
+          | StudioLife
         </title>
+        <meta name="description" content={product.short_description} />
       </Head>
       <Flex flexDirection={["column", "row"]}>
         <Box flexGrow={1} maxW={["full", "50%"]}>
           <PhotoCarousel images={product.images.edges} />
         </Box>
-        <Stack direction={["column"]} spacing={8} p={[8, 20]}  maxW={["full", "50%"]}>
+        <Stack
+          direction={["column"]}
+          spacing={8}
+          p={[8, 20]}
+          maxW={["full", "50%"]}
+        >
           <Stack direction={"column"} spacing={2} alignItems={"flex-start"}>
-            <Heading>
-              {product.on_page_title?.value
-                ? product.on_page_title.value
-                : product.title}
-            </Heading>
+            <HStack justify={"space-between"} w="full">
+              <Heading>
+                {product.on_page_title?.value
+                  ? product.on_page_title.value
+                  : product.title}
+              </Heading>
+              <Text fontSize={24} fontWeight={600}>
+                {checkPrice(variantId)}
+              </Text>
+            </HStack>
             <HStack spacing={2}>
               <Tag size="lg">
                 <TagLeftIcon boxSize={4} as={FaUserGraduate} />
@@ -112,9 +126,6 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
             Read Full Description
           </Button>
           <Stack spacing={4}>
-            <Text fontSize={24} fontWeight={600}>
-              {checkPrice(variantId)}
-            </Text>
             {variants.length > 1 && (
               <Select
                 value={variantId}
@@ -130,7 +141,7 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
                 ))}
               </Select>
             )}
-            <Button size="lg" alignSelf={"flex-start"} onClick={addToCart}>
+            <Button size="lg" onClick={addToCart}>
               Add To Cart
             </Button>
           </Stack>

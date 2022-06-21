@@ -126,17 +126,17 @@ function Name({ firstName }: { firstName: string }) {
 function Orders({ userData }: { userData: any}) {
   if(!userData) return null
 
-  if (userData.orders.edges.length === 0)
+  if (userData.orders?.edges.length === 0)
     return <Box>You haven&apos;t made any purchases yet.</Box>;
 
-  if (userData.orders.edges.length > 0)
+  if (userData.orders?.edges.length > 0)
     return (
       <Box>
         <Heading mb={8} size="xl">
-          Orders
+          Order History
         </Heading>
         <Stack spacing={4}>
-          {userData.orders.edges.map((o:any) => (
+          {userData.orders?.edges.map((o:any) => (
             <>
               <Box key={o._id}>
                 <Flex justifyContent={"space-between"} mb={4}>
@@ -170,5 +170,5 @@ function Orders({ userData }: { userData: any}) {
         </Stack>
       </Box>
     );
-  else return <Box>Something&apos;s wrong.</Box>;
+  else return <Box>Something went wrong.</Box>;
 }

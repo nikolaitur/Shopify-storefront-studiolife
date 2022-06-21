@@ -2,7 +2,7 @@
 // studio/deskStructure.js
 
 import S from "@sanity/desk-tool/structure-builder";
-import { ImHome, ImQuestion, ImUsers } from "react-icons/im";
+import { ImBriefcase, ImHome, ImQuestion, ImUserPlus, ImUsers } from "react-icons/im";
 
 export default () =>
   S.list()
@@ -17,6 +17,26 @@ export default () =>
           .schemaType("homepage")
           .documentId("home")
           .title("Home")
+      ),
+      S.listItem()
+      .title("Private & Corporate Events")
+      .icon(ImUserPlus)
+      .child(
+        S.editor()
+          .id("privateEvents")
+          .schemaType("privateEvents")
+          .documentId("privateEvents")
+          .title("Private & Corporate Events")
+      ),
+      S.listItem()
+      .title("Partner with us")
+      .icon(ImBriefcase)
+      .child(
+        S.editor()
+          .id("partner")
+          .schemaType("partner")
+          .documentId("partner")
+          .title("Partner with us")
       ),
       S.listItem()
       .title("About")
@@ -41,6 +61,6 @@ export default () =>
         S.divider(),
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !["homepage","about", "help", "category"].includes(listItem.getId())
+          !["homepage","about", "help", "category", "privateEvents", "partner"].includes(listItem.getId())
       ),
     ]);

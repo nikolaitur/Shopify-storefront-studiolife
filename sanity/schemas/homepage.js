@@ -45,20 +45,20 @@ export default {
             type: "string",
             name: "title",
           },
-          {
-            title: "Subtitle",
-            description:
-              "This subtitle will appear in the hero unit at the top of the page",
-            type: "string",
-            name: "subtitle",
-          },
-          {
-            title: "Text",
-            description:
-              "This subtext appears below the subtitle, in the hero section.",
-            type: "string",
-            name: "text",
-          },
+          // {
+          //   title: "Subtitle",
+          //   description:
+          //     "This subtitle will appear in the hero unit at the top of the page",
+          //   type: "string",
+          //   name: "subtitle",
+          // },
+          // {
+          //   title: "Text",
+          //   description:
+          //     "This subtext appears below the subtitle, in the hero section.",
+          //   type: "string",
+          //   name: "text",
+          // },
           {
             name: 'image',
             title: 'Hero Image',

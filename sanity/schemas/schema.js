@@ -15,6 +15,8 @@ import help from './help'
 import faq from './faq'
 import eventType from './eventType'
 import review from './review'
+import privateEvents from './privateEvents'
+import partner from './partner'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -27,8 +29,9 @@ export default createSchema({
     // in the studio.
     homepage,
     about,
+    privateEvents,
+    partner,
     help,
-
     author,
     post,
     faq,

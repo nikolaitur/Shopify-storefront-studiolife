@@ -20,6 +20,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Divider,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { gql, GraphQLClient } from "graphql-request";
@@ -29,6 +30,7 @@ import formatter from "lib/formatter";
 import { FaBox, FaClock, FaUserGraduate, FaUsers } from "react-icons/fa";
 import dayjs from "dayjs";
 import PhotoCarousel from "components/PhotoCarousel";
+import MultiText from "lib/MultiText";
 
 //to-do: add "associated products" so that they can add additional kits like with Lettering for Light
 
@@ -70,30 +72,38 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
   return (
     <>
       <Head>
-        <title>{product.title} | StudioLife</title>
+        <title>
+          {product.on_page_title?.value
+            ? product.on_page_title.value
+            : product.title}{" "}
+          | StudioLife
+        </title>
+        <meta name="description" content={product.short_description} />
       </Head>
-      <Flex flexDirection={["column", "row"]} alignItems="flex-start">
+      <Flex flexDirection={["column", "row"]}>
         <Box flexGrow={1} maxW={["full", "50%"]}>
           <PhotoCarousel images={product.images.edges} />
         </Box>
-        <Stack direction={["column"]} spacing={8} p={[8, 20]}  maxW={["full", "50%"]}>
-          <Stack
-            pt={[20]}
-            direction={"column"}
-            spacing={6}
-            alignItems={"flex-start"}
-            pos={["static", "sticky"]}
-            top={-52}
-            bg={"white"}
-            px={[2, 10]}
-            pb={6}
-          >
-            <Box>
-              <Text>
-                {dayjs(product.date?.value).format("dddd, MMMM DD, YYYY")}
+        <Stack
+          direction={["column"]}
+          spacing={8}
+          p={[8, 20]}
+          maxW={["full", "50%"]}
+        >
+          <Stack direction={"column"} spacing={2} alignItems={"flex-start"}>
+            <Text>
+              {dayjs(product.date?.value).format("dddd, MMMM DD, YYYY")}
+            </Text>
+            <HStack justify={"space-between"} w="full">
+              <Heading>
+                {product.on_page_title?.value
+                  ? product.on_page_title.value
+                  : product.title}
+              </Heading>
+              <Text fontSize={24} fontWeight={600}>
+                {checkPrice(variantId)}
               </Text>
-              <Heading>{product.title}</Heading>
-            </Box>
+            </HStack>
             <HStack spacing={2}>
               <Tag size="lg">
                 <TagLeftIcon boxSize={4} as={FaUserGraduate} />
@@ -119,31 +129,38 @@ const Product = ({ handle, product }: { handle: string; product: any }) => {
                 </>
               )}
             </HStack>
-            <Stack spacing={4}>
-              {variants.length > 1 && (
-                <Select
-                  value={variantId}
-                  onChange={(e) => {
-                    setVariantId(e.target.value);
-                    checkPrice(e.target.value);
-                  }}
-                >
-                  {variants.map((v: any) => (
-                    <option key={v.node.id} value={v.node.id}>
-                      {v.node.title}
-                    </option>
-                  ))}
-                </Select>
-              )}
-              <Stack w="full" justify={"space-between"}>
-                <Text fontSize={24} fontWeight={600}>
-                  {checkPrice(variantId)}
-                </Text>
-                <Button alignSelf={"flex-start"} onClick={addToCart}>
-                  Add To Cart
-                </Button>
-              </Stack>
-            </Stack>
+          </Stack>
+          <Divider />
+          <MultiText
+            text={
+              product.short_description?.value
+                ? product.short_description.value
+                : ""
+            }
+            mapKey={"desc"}
+          />
+          <Button variant="outline" onClick={onOpen}>
+            Read Full Description
+          </Button>
+          <Stack spacing={4}>
+            {variants.length > 1 && (
+              <Select
+                value={variantId}
+                onChange={(e) => {
+                  setVariantId(e.target.value);
+                  checkPrice(e.target.value);
+                }}
+              >
+                {variants.map((v: any, i: number) => (
+                  <option key={v.node.id} value={v.node.id}>
+                    {v.node.title}
+                  </option>
+                ))}
+              </Select>
+            )}
+            <Button size="lg" onClick={addToCart}>
+              Add To Cart
+            </Button>
           </Stack>
         </Stack>
       </Flex>
@@ -208,7 +225,7 @@ export async function getStaticPaths() {
             images(first: 10) {
               edges {
                 node {
-                  src
+                  url
                 }
               }
             }
@@ -295,7 +312,7 @@ export async function getStaticProps(context: any) {
       images(first: 10) {
         edges {
           node {
-            src
+            url
           }
         }
       }

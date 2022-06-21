@@ -2,7 +2,7 @@ import { GiPartyFlags } from 'react-icons/gi'
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'eventType',
-  title: 'Rental Event Types',
+  title: 'Venue Rental Event Types',
   type: 'document',
   icon: GiPartyFlags,
   fields: [

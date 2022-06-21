@@ -23,8 +23,12 @@ import {
 } from "react-icons/hi";
 import { useFormik } from "formik";
 import Head from "next/head";
+import { GetStaticPropsContext } from "next";
+import { groq } from "next-sanity";
+import { getClient, imageBuilder } from "lib/sanity";
+import MultiText from "lib/MultiText";
 
-export default function Partner() {
+export default function Partner({page}: any) {
   const workForm = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -33,20 +37,20 @@ export default function Partner() {
         <title>Partner With Us | StudioLife</title>
       </Head>
       <Box
-        bgImage={"/photos/sarah-book-celebration.jpg"}
+        bgImage={imageBuilder(page.hero.image).url()}
         bgSize="cover"
         bgPos="center bottom"
       >
         <Container py={80}>
           <Stack textAlign={"center"} align="center">
-            <Text>share your craft with a new audience</Text>
-            <Heading>creating space and opportunity</Heading>
+            <Text>{page.hero.supertext}</Text>
+            <Heading>{page.hero.title}</Heading>
             <Button
               onClick={() =>
                 workForm.current?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              Work With Us!
+              {page.hero.button.text}
             </Button>
           </Stack>
         </Container>
@@ -54,26 +58,17 @@ export default function Partner() {
       <Container maxW="container.lg" py={20}>
         <Stack textAlign={"center"} align="center" spacing={8}>
           <Box>
-            <Text>new audiences, brought to you</Text>
+            <Text>{page.belowTheFold.supertext}</Text>
             <Heading>
-              partner with <span className="studiolife">StudioLife</span>
+            {page.belowTheFold.title}
             </Heading>
           </Box>
           <Divider w="200px" />
-          <Text>
-            We are always looking for new, talented artists to share their craft
-            with our community.
-          </Text>
-          <Text>
-            We enable artists to come and teach without having to manage all the
-            nitty gritty that takes place from start to finish.Our hope is that
-            artists-instructors are free to show up and share their gifts with
-            eager learners.
-          </Text>
+          <MultiText text={page.belowTheFold.text} mapKey={"belowTheFold"} />
         </Stack>
       </Container>
       <Box
-        bgImage={"/photos/partner-with-us.jpg"}
+        bgImage={imageBuilder(page.features.image).url()}
         bgSize="cover"
         bgPos="center"
         pt={20}
@@ -88,9 +83,9 @@ export default function Partner() {
         >
           <Stack spacing={8} align="center">
             <Box textAlign={"center"}>
-              <Text fontSize={"sm"}>how it works</Text>
+              <Text fontSize={"sm"}>{page.features.supertext}</Text>
               <Heading size={"xl"}>
-                events at <span className="studiolife">StudioLife</span>
+                {page.features.title}
               </Heading>
             </Box>
             <Stack direction={["column", "row"]} textAlign="center" spacing={8}>
@@ -120,7 +115,7 @@ export default function Partner() {
       </Box>
       <Container maxW="container.lg" centerContent py={20}>
         <Stack spacing={8} align="center">
-          <Heading>pricing &amp; fee</Heading>
+          <Heading>{page.pricingAndFee.title}</Heading>
           <Divider w="200px" />
           <Stack direction={["column", "row"]} spacing={8} justify="center">
             <Box
@@ -135,14 +130,7 @@ export default function Partner() {
                 <Text fontWeight={600} fontSize="xl">
                   class pricing
                 </Text>
-                <Text>
-                  Class prices vary and are determined by the artist and include
-                  supply costs for each participant.
-                </Text>
-                <Text>
-                  We work together to find a price that works for you, and keeps
-                  the opporutnity open to attend for as many as possible
-                </Text>
+                <MultiText text={page.pricingAndFee.classPricing} mapKey={"pricing"} />
               </Stack>
             </Box>
             <Box
@@ -157,14 +145,7 @@ export default function Partner() {
                 <Text fontWeight={600} fontSize="xl">
                   StudioLife fee
                 </Text>
-                <Text>
-                  StudioLife takes a flat fee per head amount on top of the
-                  artist set price to determine the total class price.
-                </Text>
-                <Text>
-                  This structure encourages mutual motivation for class
-                  promotion...the bigger the class the better we all do!
-                </Text>
+                <MultiText text={page.pricingAndFee.studiolifeFee} mapKey={"fee"} />
               </Stack>
             </Box>
           </Stack>
@@ -258,4 +239,15 @@ function PartnerContactForm() {
       </SimpleGrid>
     </form>
   );
+}
+
+export async function getStaticProps({ params }: GetStaticPropsContext) {
+  const eventQuery = groq`*[_type == "partner"][0]{..., venueUses[]->}`;
+
+  const result = await getClient(false).fetch(eventQuery, {});
+
+  return {
+    props: { page: result },
+    revalidate: 10,
+  };
 }

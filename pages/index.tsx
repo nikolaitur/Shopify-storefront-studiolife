@@ -472,6 +472,6 @@ export async function getStaticProps() {
       homepageData,
       collections: res.collections,
     },
-    revalidate: 3600,
+    revalidate: 10,
   };
 }

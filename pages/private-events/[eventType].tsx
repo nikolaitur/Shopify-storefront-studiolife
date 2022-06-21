@@ -145,6 +145,6 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
 
   return {
     props: result[0],
-    revalidate: 60
+    revalidate: 10
   };
 }
