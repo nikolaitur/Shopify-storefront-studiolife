@@ -85,7 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={customTheme}>
       <ShopContext.Provider value={{ shop }}>
         <Head>
-          <meta name="theme-color" content="rgba(36,36,36)" />
+          <meta name="theme-color" content="rgba(255,255,255)" />
           <link rel="icon" href="/favicon-32x32.png" type="image/x-icon" />
         </Head>
         <CartContext.Provider value={{ cart, setCart }}>
