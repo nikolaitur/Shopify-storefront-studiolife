@@ -12,12 +12,20 @@ import {
   GridItem,
   Flex,
   Button,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import formatter from "lib/formatter";
+import { groq } from "next-sanity";
+import { getClient } from "lib/sanity";
 
-export default function ThankYou({ data }: any) {
+export default function ThankYou({ data, faqs }: any) {
   const [auth, setAuth] = useState(false);
 
   useEffect(() => {
@@ -41,30 +49,48 @@ export default function ThankYou({ data }: any) {
       <Head>
         <title>Thank You!</title>
       </Head>
-      <Container py={20} maxW="container.lg">
-        <SimpleGrid templateColumns={"repeat(3, 1fr)"}>
+      <Container py={20} maxW="container.xl">
+        <SimpleGrid templateColumns={"repeat(3, 1fr)"} gap={10}>
           <GridItem colSpan={2}>
             <Stack spacing={8} align="flex-start">
               <Box>
                 <Text fontSize="2xl" fontWeight={600}>
-                  Thank you {data.displayAddress?.firstName}!
+                  Thank you, {data.displayAddress?.firstName}!
                 </Text>
                 <Text>
-                  We appreciate your business, and look forward to shipping your
-                  order!
+                  We appreciate your business, and look forward to creating
+                  space together.
                 </Text>
               </Box>
-              <Box bg={"gray.200"} px={4} py={2} borderRadius={6}>
-                <Text>You&apos;ll receive an email shortly with your shipping and tracking details.</Text>
+              <Divider />
+              <Box py={2}>
+                <Text>
+                  If you purchased a virtual class, you will receive an email
+                  shortly with your shipping and tracking details.
+                </Text>
               </Box>
-              <Stack spacing={16} justify="flex-start" direction={["column", "row"]}>
-                <ShippingDetails displayAddress={data.displayAddress} />
-                <BillingDetails billingAddress={data.billingAddress} />
+              <Divider />
+              <Stack
+                spacing={16}
+                justify="flex-start"
+                direction={["column", "row"]}
+              >
+                {data.billingAddress && (
+                  <BillingDetails billingAddress={data.billingAddress} />
+                )}
+                {data.displayAddress && (
+                  <ShippingDetails displayAddress={data.displayAddress} />
+                )}
               </Stack>
-              <NextLink href="/" passHref><Button>Continue Shopping</Button></NextLink>
             </Stack>
           </GridItem>
-          <GridItem colSpan={1} bg={"gray.200"} p={6} borderRadius={6} pos="sticky">
+          <GridItem
+            colSpan={1}
+            bg={"gray.200"}
+            p={6}
+            borderRadius={6}
+            pos="sticky"
+          >
             <Stack w="full" spacing={4}>
               <Text fontSize="2xl" fontWeight={600}>
                 Order Summary
@@ -96,11 +122,34 @@ export default function ThankYou({ data }: any) {
           </>
         )}
       </Container>
+      <Container maxW="container.md" py={20}>
+        <FaqAccordion faqs={faqs} />
+      </Container>
     </>
   );
 }
 
-function BillingDetails({ billingAddress }: any) {
+function FaqAccordion({ faqs }: { faqs: any }) {
+  return (
+    <Accordion allowMultiple allowToggle minW="50%">
+      {faqs?.map((faq: any) => (
+        <AccordionItem key={faq._id}>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                {faq.question}
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>{faq.answer}</AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+}
+
+function BillingDetails({ billingAddress }: { billingAddress?: any }) {
   return (
     <>
       <VStack spacing={1} alignItems={"flex-start"}>
@@ -128,27 +177,27 @@ function PurchaseDetails({ data }: any) {
     <SimpleGrid templateColumns={"repeat(2, 1fr)"}>
       <GridItem>Subtotal:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.currentSubtotalPriceSet.shopMoney.amount}
+        {formatter.format(data.currentSubtotalPriceSet.shopMoney.amount)}
       </GridItem>
       <GridItem>Shipping:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.totalShippingPriceSet.shopMoney.amount}
+        {formatter.format(data.totalShippingPriceSet.shopMoney.amount)}
       </GridItem>
       <GridItem>Tax:</GridItem>
       <GridItem textAlign={"right"}>
-        {data.currentTotalTaxSet.shopMoney.amount}
+        {formatter.format(data.currentTotalTaxSet.shopMoney.amount)}
       </GridItem>
       <GridItem fontWeight={600} fontSize={18} mt={2}>
         Total:
       </GridItem>
       <GridItem textAlign={"right"} fontWeight={600} fontSize={18} mt={2}>
-        {data.currentTotalPriceSet.shopMoney.amount}
+        {formatter.format(data.currentTotalPriceSet.shopMoney.amount)}
       </GridItem>
     </SimpleGrid>
   );
 }
 
-function ShippingDetails({ displayAddress }: any) {
+function ShippingDetails({ displayAddress }: { displayAddress?: any }) {
   return (
     <>
       <VStack spacing={1} alignItems={"flex-start"}>
@@ -197,9 +246,14 @@ export async function getServerSideProps(context: any) {
     `${base_url}/api/get-order?orderId=${context.params.id}`
   ).then((res) => res.json());
 
+  const faqQuery = groq`*[_type == "faq"]`;
+
+  const faqs = await getClient(false).fetch(faqQuery, {});
+
   return {
     props: {
       data: result.response.order,
+      faqs,
     },
   };
 }
