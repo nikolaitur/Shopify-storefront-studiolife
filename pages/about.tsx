@@ -175,7 +175,7 @@ const About = ({ page }: any) => {
       </Container>
       <Container pt={0} pb={40}>
         <Stack spacing={6}>
-          <Heading as="h3">{page.story.part2.heading}</Heading>
+          <Heading as="h3">{page.story.part3.heading}</Heading>
           <MultiText text={page.story.part3.text} mapKey={"story_p3"} />
         </Stack>
       </Container>

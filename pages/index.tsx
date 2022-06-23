@@ -271,7 +271,7 @@ function HomePage({
                       date={dayjs(node.date?.value).format("MMMM DD, YYYY")}
                       duration={node.duration?.value}
                       eventName={node.on_page_title?.value}
-                      eventType={node.productType}
+                      eventType={"Recorded Workshop"}
                       image={node.images.edges[0].node.transformedSrc}
                       shortDesc={
                         node.short_description?.value
@@ -282,7 +282,7 @@ function HomePage({
                       time={dayjs(node.date?.value).format("hh:mm A PST")}
                       tap={() => router.push(`/workshop/${node.handle}`)}
                       variant="Workshop"
-                      cta={"buy now"}
+                      cta={"learn more"}
                     />
                   </Box>
                 )

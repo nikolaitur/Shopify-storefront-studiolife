@@ -88,7 +88,7 @@ export default function CollectionPage({
                       date={dayjs(p.node.date?.value).format("MMMM DD, YYYY")}
                       duration={p.node.duration?.value}
                       eventName={p.node.on_page_title?.value}
-                      eventType={p.node.productType}
+                      eventType={p.node.productType === "On-Demand Workshop" ? "Recorded Workshop" : p.node.productType}
                       image={p.node.images.edges[0].node.transformedSrc}
                       shortDesc={
                         p.node.short_description?.value
@@ -113,7 +113,7 @@ export default function CollectionPage({
                       }
                       cta={
                         p.node.productType === "On-Demand Workshop"
-                          ? "buy now"
+                          ? "learn more"
                           : "sign up"
                       }
                     />

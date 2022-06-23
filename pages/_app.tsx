@@ -6,7 +6,6 @@ import {
   ThemeComponents,
   ThemeConfig,
   Box,
-  Container,
 } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import Footer from "components/Footer";
@@ -19,6 +18,7 @@ import Tawk from "lib/tawk";
 import Script from "next/script";
 import dynamic from "next/dynamic";
 import "../styles/globals.css";
+import { useRouter } from "next/router";
 
 const DynNav = dynamic(() => import("../components/Navbar"), { ssr: false });
 
@@ -63,11 +63,13 @@ const customTheme: ThemeConfig = extendTheme({
 declare global {
   interface Window {
     Tawk_API: any;
+    fd: any;
   }
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [cart, setCart] = useState<any>({ id: null, lines: [] });
+  const router = useRouter();
   const shop = {
     name: "StudioLife",
   };
@@ -95,15 +97,16 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Box
               py={20}
               px={["18px", 0]}
-              bgImage={'/photos/upcoming-classes.jpg'}
+              bgImage={
+                router.pathname === "/" ? "/photos/upcoming-classes.jpg" : ""
+              }
               bgAttachment={["scroll", "fixed"]}
               bgSize={"cover"}
             >
               <MailingList />
             </Box>
-            <Container maxW={"container.xl"} py={20}>
+            <Box py={20}>
               <div
-                style={{maxWidth: 1024, margin: '0px auto'}}
                 className="embedsocial-hashtag"
                 data-ref="bdd887c7d997110fa17eec92f3f237996262c6aa"
               ></div>
@@ -113,13 +116,40 @@ function MyApp({ Component, pageProps }: AppProps) {
                   __html: `(function(d, s, id){var js; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = "https://embedsocial.com/cdn/ht.js"; d.getElementsByTagName("head")[0].appendChild(js);}(document, "script", "EmbedSocialHashtagScript"));`,
                 }}
               />
-            </Container>
+            </Box>
             <Footer />
           </Box>
         </CartContext.Provider>
       </ShopContext.Provider>
       <ColorModeScript initialColorMode={customTheme.initialColorMode} />
       <Tawk src="https://embed.tawk.to/62266409a34c24564129e82e/1ftivdi1s" />
+      <Script
+        id="flodesk_popup"
+        dangerouslySetInnerHTML={{
+          __html: `(function(w, d, t, h, s, n) {
+            w.FlodeskObject = n;
+            var fn = function() {
+              (w[n].q = w[n].q || []).push(arguments);
+            };
+            w[n] = w[n] || fn;
+            var f = d.getElementsByTagName(t)[0];
+            var v = '?v=' + Math.floor(new Date().getTime() / (120 * 1000)) * 60;
+            var sm = d.createElement(t);
+            sm.async = true;
+            sm.type = 'module';
+            sm.src = h + s + '.mjs' + v;
+            f.parentNode.insertBefore(sm, f);
+            var sn = d.createElement(t);
+            sn.async = true;
+            sn.noModule = true;
+            sn.src = h + s + '.js' + v;
+            f.parentNode.insertBefore(sn, f);
+          })(window, document, 'script', 'https://assets.flodesk.com', '/universal', 'fd');`,
+        }}
+      />
+      <Script id="flodesk_popup_2">
+        {`window.fd("form", { formId: "626ac1571e8046b220253bfa",});`}
+      </Script>
     </ChakraProvider>
   );
 }
