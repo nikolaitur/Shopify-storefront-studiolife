@@ -10,14 +10,15 @@ import {
   Input,
   AspectRatio,
   Image,
+  Button,
 } from "@chakra-ui/react";
 import getCollections from "lib/get-collections";
-import EventFeature from "../../components/EventFeature";
 import { useState } from "react";
 import { GetStaticPropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import NextLink from 'next/link'
 
 const EventCard = dynamic<any>(
   () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
@@ -42,7 +43,11 @@ export default function CollectionPage({
         <title>{data.title} | StudioLife</title>
         <meta name="description" content={data.description} />
       </Head>
-      <Stack direction={["column-reverse", "row"]} align="center" bgColor={"#eae6e1"}>
+      <Stack
+        direction={["column-reverse", "row"]}
+        align="center"
+        bgColor={"#eae6e1"}
+      >
         <Stack spacing={4} p={[8, 20]}>
           <Heading fontSize="5xl">{data.title}</Heading>
           <Box
@@ -88,7 +93,11 @@ export default function CollectionPage({
                       date={dayjs(p.node.date?.value).format("MMMM DD, YYYY")}
                       duration={p.node.duration?.value}
                       eventName={p.node.on_page_title?.value}
-                      eventType={p.node.productType === "On-Demand Workshop" ? "Recorded Workshop" : p.node.productType}
+                      eventType={
+                        p.node.productType === "On-Demand Workshop"
+                          ? "Recorded Workshop"
+                          : p.node.productType
+                      }
                       image={p.node.images.edges[0].node.transformedSrc}
                       shortDesc={
                         p.node.short_description?.value
@@ -127,6 +136,9 @@ export default function CollectionPage({
                   👇 Join our mailing list below to get updated when more events
                   arrive! 👇
                 </Text>
+                <NextLink href={"/collection/recorded-workshops"}>
+                  <Button alignSelf={"center"}>See Our Recorded Workshops</Button>
+                </NextLink>
               </Stack>
             )}
           </Flex>

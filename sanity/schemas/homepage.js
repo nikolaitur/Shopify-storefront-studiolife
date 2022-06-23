@@ -4,12 +4,6 @@ export default {
     name: "homepage",
     title: "Homepage",
     type: "document",
-  
-    // These actions define what users can do with this document.
-    // Notice how "delete" is not available in this array.
-    // This means, users can't delete this document
-    // from within the studio
-    // __experimental_actions: ["update", "create", "publish"],
     groups: [{
       default: true,
       name: 'content',
@@ -45,20 +39,6 @@ export default {
             type: "string",
             name: "title",
           },
-          // {
-          //   title: "Subtitle",
-          //   description:
-          //     "This subtitle will appear in the hero unit at the top of the page",
-          //   type: "string",
-          //   name: "subtitle",
-          // },
-          // {
-          //   title: "Text",
-          //   description:
-          //     "This subtext appears below the subtitle, in the hero section.",
-          //   type: "string",
-          //   name: "text",
-          // },
           {
             name: 'image',
             title: 'Hero Image',

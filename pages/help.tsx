@@ -23,7 +23,8 @@ export default function FAQ({ data }: { data: any }) {
   return (
     <>
       <Head>
-        <title>Help | StudioLife</title>
+      <title>{data.pageTitle} | StudioLife</title>
+        <meta name="description" content={data.metaDescription} />
       </Head>
       <Box pt={[10, 20]} bg="brand.accent1" w="full">
         <Container maxW="container.lg" py={20} centerContent>

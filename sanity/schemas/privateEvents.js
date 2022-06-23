@@ -4,17 +4,30 @@ export default {
   type: "document",
   groups: [
     {
-      name: "content",
       default: true,
+      name: "content",
+      title: "Content",
     },
     {
       name: "seo",
+      title: "SEO",
     },
   ],
   fields: [
     {
+      name: "pageTitle",
+      type: "string",
+      group: "seo",
+    },
+    {
+      name: "metaDescription",
+      type: "text",
+      group: "seo",
+    },
+    {
       name: "hero",
       type: "object",
+      group: "content",
       fields: [
         {
           name: "supertext",
@@ -29,24 +42,25 @@ export default {
           type: "image",
         },
         {
-            name: "button",
-            type: "object",
-            fields: [
-              {
-                name: "text",
-                type: "string",
-              },
-              {
-                name: "link",
-                type: "string",
-              },
-            ],
-          },
+          name: "button",
+          type: "object",
+          fields: [
+            {
+              name: "text",
+              type: "string",
+            },
+            {
+              name: "link",
+              type: "string",
+            },
+          ],
+        },
       ],
     },
     {
       name: "features",
       type: "object",
+      group: "content",
       fields: [
         {
           name: "supertext",
@@ -61,6 +75,7 @@ export default {
     {
       name: "corporateEvents",
       type: "object",
+      group: "content",
       fields: [
         {
           name: "title",
@@ -89,10 +104,11 @@ export default {
     {
       name: "spaceRentals",
       type: "object",
+      group: "content",
       fields: [
         {
-            name: 'image',
-            type: 'image'
+          name: "image",
+          type: "image",
         },
         {
           name: "title",
@@ -119,13 +135,15 @@ export default {
       ],
     },
     {
-        name: 'venueUseTitle',
-        type: 'string'
+      name: "venueUseTitle",
+      type: "string",
+      group: "content",
     },
     {
-        name: 'venueUses',
-        type: 'array',
-        of: [{type: 'reference', to: {type: 'eventType'}}]
-    }
+      name: "venueUses",
+      type: "array",
+      group: "content",
+      of: [{ type: "reference", to: { type: "eventType" } }],
+    },
   ],
 };

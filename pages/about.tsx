@@ -22,7 +22,8 @@ const About = ({ page }: any) => {
   return (
     <>
       <Head>
-        <title>about | StudioLife</title>
+        <title>{page.pageTitle} | StudioLife</title>
+        <meta name="description" content={page.metaDescription} />
       </Head>
       <Container pt={40} maxW="container.lg">
         <Stack>

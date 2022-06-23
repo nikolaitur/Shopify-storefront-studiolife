@@ -28,13 +28,14 @@ import { groq } from "next-sanity";
 import { getClient, imageBuilder } from "lib/sanity";
 import MultiText from "lib/MultiText";
 
-export default function Partner({page}: any) {
+export default function Partner({ page }: any) {
   const workForm = useRef<HTMLDivElement | null>(null);
 
   return (
     <>
       <Head>
-        <title>Partner With Us | StudioLife</title>
+        <title>{page.pageTitle} | StudioLife</title>
+        <meta name="description" content={page.metaDescription} />
       </Head>
       <Box
         bgImage={imageBuilder(page.hero.image).url()}
@@ -59,9 +60,7 @@ export default function Partner({page}: any) {
         <Stack textAlign={"center"} align="center" spacing={8}>
           <Box>
             <Text>{page.belowTheFold.supertext}</Text>
-            <Heading>
-            {page.belowTheFold.title}
-            </Heading>
+            <Heading>{page.belowTheFold.title}</Heading>
           </Box>
           <Divider w="200px" />
           <MultiText text={page.belowTheFold.text} mapKey={"belowTheFold"} />
@@ -84,9 +83,7 @@ export default function Partner({page}: any) {
           <Stack spacing={8} align="center">
             <Box textAlign={"center"}>
               <Text fontSize={"sm"}>{page.features.supertext}</Text>
-              <Heading size={"xl"}>
-                {page.features.title}
-              </Heading>
+              <Heading size={"xl"}>{page.features.title}</Heading>
             </Box>
             <Stack direction={["column", "row"]} textAlign="center" spacing={8}>
               <Box maxW={["full", "20%"]}>
@@ -130,7 +127,10 @@ export default function Partner({page}: any) {
                 <Text fontWeight={600} fontSize="xl">
                   class pricing
                 </Text>
-                <MultiText text={page.pricingAndFee.classPricing} mapKey={"pricing"} />
+                <MultiText
+                  text={page.pricingAndFee.classPricing}
+                  mapKey={"pricing"}
+                />
               </Stack>
             </Box>
             <Box
@@ -145,7 +145,10 @@ export default function Partner({page}: any) {
                 <Text fontWeight={600} fontSize="xl">
                   StudioLife fee
                 </Text>
-                <MultiText text={page.pricingAndFee.studiolifeFee} mapKey={"fee"} />
+                <MultiText
+                  text={page.pricingAndFee.studiolifeFee}
+                  mapKey={"fee"}
+                />
               </Stack>
             </Box>
           </Stack>
@@ -180,7 +183,7 @@ function PartnerContactForm() {
         },
         body: JSON.stringify(values),
       });
-      
+
       toast({
         title: "Form Submitted!",
         description:

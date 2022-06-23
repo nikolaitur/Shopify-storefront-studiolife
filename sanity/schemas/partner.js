@@ -2,19 +2,29 @@ export default {
   name: "partner",
   title: "Partner With Us",
   type: "document",
-  groups: [
-    {
-      name: "content",
-      default: true,
-    },
-    {
-      name: "seo",
-    },
-  ],
+  groups: [{
+    default: true,
+    name: 'content',
+    title: 'Content'
+  },{
+    name: 'seo',
+    title: 'SEO'
+  }],
   fields: [
+    {
+      name: 'pageTitle',
+      type: 'string',
+      group: 'seo'
+    },
+    {
+      name: 'metaDescription',
+      type: 'text',
+      group: 'seo'
+    },
     {
       name: "hero",
       type: "object",
+      group: 'content',
       fields: [
         {
           name: "supertext",
@@ -43,6 +53,7 @@ export default {
     {
       name: "belowTheFold",
       type: "object",
+      group: 'content',
       fields: [
         {
           name: "supertext",
@@ -61,6 +72,7 @@ export default {
     {
       name: "features",
       type: "object",
+      group: 'content',
       fields: [
         {
           name: "image",
@@ -79,6 +91,7 @@ export default {
     {
       name: "pricingAndFee",
       type: "object",
+      group: 'content',
       fields: [
         {
           name: "title",

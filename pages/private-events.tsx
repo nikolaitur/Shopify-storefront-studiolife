@@ -28,7 +28,8 @@ export default function PrivateEvents({ page }: any) {
   return (
     <>
       <Head>
-        <title>Private Events | StudioLife</title>
+        <title>{page.pageTitle} | StudioLife</title>
+        <meta name="description" content={page.metaDescription} />
       </Head>
       <Box
         bgImage={imageBuilder(page.hero.image).url()}

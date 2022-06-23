@@ -1,7 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-
-import { m } from "framer-motion";
-
 // studio/schemas/about.js
 export default {
   name: "about",
@@ -25,6 +22,16 @@ export default {
     }
   ],
   fields: [
+    {
+      name: 'pageTitle',
+      type: 'string',
+      group: 'seo'
+    },
+    {
+      name: 'metaDescription',
+      type: 'text',
+      group: 'seo'
+    },
     {
       name: 'largeText',
       title: 'Large Text',
