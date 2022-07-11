@@ -114,7 +114,7 @@ const Navbar = () => {
                 </MenuItem>
                 <MenuItem>
                   <NextLink href="/private-events#space-rentals" passHref>
-                    <Link>Rent The Shop</Link>
+                    <Link>Venue Rentals</Link>
                   </NextLink>
                 </MenuItem>
               </MenuList>
@@ -203,7 +203,7 @@ function MobileMenu() {
                 <Link fontSize="lg">Private &amp; Corporate Events</Link>
               </NextLink>
               <NextLink href="/private-events#space-rentals" passHref>
-                <Link fontSize="lg">Rent The Shop</Link>
+                <Link fontSize="lg">Venue Rentals</Link>
               </NextLink>
               <Divider />
               <NextLink href="/partner" passHref>
