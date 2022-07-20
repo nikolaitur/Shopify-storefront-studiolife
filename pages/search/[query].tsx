@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 
 const EventCard = dynamic<any>(
-  () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
+  () => import("https://framer.com/m/Event-Card-p1O7.js@7fAs5knTBdn9N5rGWM3r"),
   { ssr: false }
 );
 
@@ -51,6 +51,9 @@ const Search = ({
                             : "sign up"
                         } to learn more.`
                   }
+                  style={{
+                    minHeight: "100%"
+                  }}
                   teacher={p.node.teacher.value}
                   time={dayjs(p.node.date?.value).format("hh:mm A PST")}
                   tap={() =>

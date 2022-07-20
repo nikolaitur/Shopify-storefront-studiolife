@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import NextLink from 'next/link'
 
 const EventCard = dynamic<any>(
-  () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
+  () => import("https://framer.com/m/Event-Card-p1O7.js@7fAs5knTBdn9N5rGWM3r"),
   { ssr: false }
 );
 
@@ -98,6 +98,9 @@ export default function CollectionPage({
                           ? "Recorded Workshop"
                           : p.node.productType
                       }
+                      style={{
+                        minHeight: "100%"
+                      }}
                       image={p.node.images.edges[0].node.transformedSrc}
                       shortDesc={
                         p.node.short_description?.value

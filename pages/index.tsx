@@ -26,7 +26,7 @@ import dayjs from "dayjs";
 import MultiText from "lib/MultiText";
 
 const EventCard = dynamic<any>(
-  () => import("https://framer.com/m/Event-Card-p1O7.js@F53hafdoFG1aEjOUUOLg"!),
+  () => import("https://framer.com/m/Event-Card-p1O7.js@7fAs5knTBdn9N5rGWM3r"),
   { ssr: false }
 );
 
@@ -101,7 +101,9 @@ function HomePage({
           <Heading size="xl" as="h2">
             {homepageData.belowTheFold.title}
           </Heading>
-          <Text pb={4} maxW={["full", "50%"]}>{homepageData.belowTheFold.text}</Text>
+          <Text pb={4} maxW={["full", "50%"]}>
+            {homepageData.belowTheFold.text}
+          </Text>
           <SimpleGrid
             templateColumns={["repeate(1, 1fr)", "repeat(3, 1fr)"]}
             gap={6}
@@ -194,6 +196,9 @@ function HomePage({
                       eventName={node.on_page_title.value}
                       eventType={node.productType}
                       image={node.images.edges[0].node.transformedSrc}
+                      style={{
+                        minHeight: "100%",
+                      }}
                       shortDesc={
                         node.short_description?.value
                           ? node.short_description?.value
@@ -268,6 +273,9 @@ function HomePage({
                 ({ node }: { node: any }) => (
                   <Box key={node.id}>
                     <EventCard
+                      style={{
+                        minHeight: "100%",
+                      }}
                       date={dayjs(node.date?.value).format("MMMM DD, YYYY")}
                       duration={node.duration?.value}
                       eventName={node.on_page_title?.value}
